@@ -1,0 +1,54 @@
+:root {
+  --sl-color-accent-low: #173c2c;
+  --sl-color-accent: #277d50;
+  --sl-color-accent-high: #b7f5ce;
+  --sl-font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+:root[data-theme='light'] {
+  --sl-color-accent-low: #e4f5ea;
+  --sl-color-accent: #247549;
+  --sl-color-accent-high: #18442c;
+}
+.hero { padding-block: clamp(2rem, 5vw, 4rem); }
+.hero h1 { max-width: 850px; font-size: clamp(2.7rem, 6vw, 5.2rem); letter-spacing: -.055em; line-height: 1.06; }
+.hero .tagline { max-width: 42rem; font-size: 1.2rem; line-height: 1.7; }
+.site-title { letter-spacing: -.04em; font-weight: 750; }
+.sl-markdown-content h2 { letter-spacing: -.035em; }
+.project-status { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; font: 600 .72rem/1.6 ui-monospace, monospace; letter-spacing: .06em; margin-bottom: 1.5rem; color: var(--sl-color-accent-high); }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.status-note { color: var(--sl-color-gray-3); font: 400 .85rem/1.6 var(--sl-font); letter-spacing: 0; margin-left: auto; }
+.relay-demo { border: 1px solid var(--sl-color-gray-5); border-radius: 16px; background: var(--sl-color-gray-6); overflow: hidden; box-shadow: 0 20px 70px #00000012; margin-block: 1.5rem 4rem; }
+.relay-demo * { margin-top: 0; }
+.demo-bar, .demo-footer { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.5rem; }
+.demo-bar { border-bottom: 1px solid var(--sl-color-gray-5); }
+.demo-label, .demo-context, .provider-tag { font: 500 .7rem/1.5 ui-monospace, monospace; letter-spacing: .08em; color: var(--sl-color-gray-3); }
+.demo-key, kbd { border: 1px solid var(--sl-color-gray-5); border-radius: 5px; font: .7rem/1.5 ui-monospace, monospace; padding: .2rem .45rem; }
+.demo-context { padding: 1.2rem 1.5rem .5rem; }
+.demo-context span { margin-left: 1rem; color: var(--sl-color-accent-high); letter-spacing: 0; }
+.demo-search { padding: .9rem 1.5rem 1.3rem; display: flex; align-items: center; gap: .8rem; color: var(--sl-color-gray-3); font-size: 1.1rem; }
+.demo-search kbd { margin-left: auto; }
+.demo-search > span { font-size: 1.8rem; }
+.demo-command { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; margin: .3rem .75rem; border-radius: 8px; font-size: .95rem; }
+.demo-command.selected { background: var(--sl-color-accent-low); }
+.command-icon { font-size: 1.4rem; width: 1.7rem; text-align: center; color: var(--sl-color-accent-high); }
+.demo-command small { display: block; color: var(--sl-color-gray-3); font-size: .78rem; margin-top: .15rem; }
+.provider-tag { margin-left: auto; font-size: .62rem; white-space: nowrap; }
+.demo-footer { border-top: 1px solid var(--sl-color-gray-5); margin-top: 1rem; font-size: .75rem; color: var(--sl-color-gray-3); }
+.capability-flow { padding: 2rem; border: 1px solid var(--sl-color-gray-5); border-radius: 12px; margin-block: 2rem 3rem; text-align: center; background: var(--sl-color-gray-6); }
+.flow-row { display: flex; justify-content: center; flex-wrap: wrap; gap: .65rem; }
+.flow-row span { border: 1px solid var(--sl-color-gray-5); border-radius: 6px; padding: .65rem 1rem; font-size: .85rem; }
+.flow-line { color: var(--sl-color-gray-3); font-size: 1.5rem; margin: .5rem; }
+.flow-core { border: 1px solid var(--sl-color-accent); background: var(--sl-color-accent-low); border-radius: 8px; padding: 1.25rem; max-width: 32rem; margin-inline: auto; color: var(--sl-color-accent-high); font: 600 .85rem/1.7 ui-monospace, monospace; letter-spacing: .06em; }
+.flow-core small { display: block; font: 400 .85rem/1.7 var(--sl-font); letter-spacing: 0; }
+.capability-flow p { font-size: .75rem; color: var(--sl-color-gray-3); margin-top: 1.25rem; }
+.card { border-radius: 10px; }
+@media (max-width: 600px) {
+  .status-note { margin-left: 0; width: 100%; }
+  .demo-bar, .demo-footer { padding-inline: 1rem; }
+  .demo-command { gap: .6rem; padding-inline: .65rem; }
+  .demo-command small { max-width: 14rem; }
+  .demo-label { font-size: .6rem; }
+  .demo-key { font-size: .6rem; }
+  .demo-footer { flex-wrap: wrap; }
+  .capability-flow { padding: 1rem; }
+}

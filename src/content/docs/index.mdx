@@ -1,0 +1,54 @@
+---
+title: One browser. A shared command layer.
+description: Web Relay is a proposed local-first capability runtime connecting browser apps, extensions, and commands.
+template: splash
+hero:
+  tagline: Your apps already know what to do. Web Relay gives their actions a shared home — a local, context-aware launcher for the browser.
+  actions:
+    - text: Explore the idea
+      link: /overview/
+      icon: right-arrow
+    - text: Help shape the project
+      link: /project/contributing/
+      variant: secondary
+---
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+<div className="project-status"><span className="status-dot"></span> OPEN DESIGN · PRE-IMPLEMENTATION <span className="status-note">A small beginning for a more connected browser.</span></div>
+
+<div className="relay-demo" aria-label="Concept illustration of a browser command launcher">
+  <div className="demo-bar"><span className="demo-label">WEB RELAY / LAUNCHER CONCEPT</span><span className="demo-key">Alt + Space</span></div>
+  <div className="demo-context">ACTIVE CONTEXT <span>Podcast / Episode 42</span></div>
+  <div className="demo-search"><span aria-hidden="true">⌕</span> What would you like to do?<kbd>esc</kbd></div>
+  <div className="demo-command selected"><span className="command-icon">↳</span><span>Save current timestamp<small>Use the episode and playback position already in context</small></span><span className="provider-tag">PWA</span></div>
+  <div className="demo-command"><span className="command-icon">▤</span><span>Create episode note</span><span className="provider-tag">PWA</span></div>
+  <div className="demo-command"><span className="command-icon">⊞</span><span>Restore coding workspace</span><span className="provider-tag">EXTENSION</span></div>
+  <div className="demo-command"><span className="command-icon">↗</span><span>Copy current URL</span><span className="provider-tag">BROWSER</span></div>
+  <div className="demo-footer">Different sources. One place to act.<span>Illustrative preview</span></div>
+</div>
+
+## Actions should travel with you.
+
+A note app knows how to create a note. A workspace extension knows how to restore your tabs. The browser knows the page you are on. Today, those actions live in separate menus. Web Relay proposes a capability registry that brings them together.
+
+<CardGrid>
+  <Card title="Local by design" icon="laptop">Command execution should work inside your browser and applications. No account, server, or cloud dependency is required for the MVP.</Card>
+  <Card title="Define once" icon="forward-slash">Register a capability once. Reuse it in your app’s palette and the browser launcher, with agents and voice as future interfaces.</Card>
+  <Card title="Context comes along" icon="puzzle">Show relevant actions for the active app, route, and state. Avoid asking for the customer, repository, or episode your app already knows.</Card>
+  <Card title="Start with what you own" icon="seti:config">Focus on personal PWAs, your extensions, and internal tools. Prove useful integrations before considering a catalogue or marketplace.</Card>
+</CardGrid>
+
+## A registry between apps and interfaces
+
+<div className="capability-flow"><div className="flow-row"><span>PWAs</span><span>Extensions</span><span>Browser</span><span>WebMCP*</span></div><div className="flow-line" aria-hidden="true">↓</div><div className="flow-core">CAPABILITY REGISTRY<small>Discover · filter by context · execute locally</small></div><div className="flow-line" aria-hidden="true">↓</div><div className="flow-row"><span>Launcher</span><span>In-app palette</span><span>Agents*</span><span>Voice*</span></div><p>* Proposed follow-on integrations. The MVP starts with PWAs, extensions, and browser commands.</p></div>
+
+## Start exploring
+
+<CardGrid>
+  <LinkCard title="Understand the architecture" description="The registry, bridge, SDK, and the first launcher client." href="/design/architecture/" />
+  <LinkCard title="See the first milestone" description="One PWA, two extensions, and a useful local workflow." href="/project/roadmap/" />
+</CardGrid>
+
+:::note[An idea taking shape]
+This site documents the project proposal. The launcher, SDK packages, and APIs shown here are not released software. Join the design discussion on [GitHub](https://github.com/web-relay/web-relay.github.io/issues).
+:::
