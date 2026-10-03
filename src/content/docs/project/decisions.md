@@ -138,3 +138,15 @@ Move local extension IDs, provider IDs, optional context-origin filters, and PWA
 Provide current extension/PWA integration guides and a reusable `web-relay-integration` coding-agent skill. Real integrations retain their own app state, functions, folders, permissions, and builds. Use the LLM provider as a packed-SDK consumer. This supersedes the earlier source-alias requirement in decision 009 and the separately consumable package gap in decision 008.
 
 **Validation:** Standalone declaration build, isolated tarball install/typecheck, both SDK transport APIs and sender rejection, cross-entry error identity, registry/protocol tests, and full Chromium PWA/extension showcase and LLM provider checks. CI distributes package artifacts; it does not publish to npm.
+
+## 012 — Async registration with provider-owned saved configuration
+
+**Status:** Implemented SDK 0.1.2 · **Date:** 3 October 2026
+
+Keep `createExtensionProvider` synchronous at service-worker startup so Chromium can deliver external messages immediately. Allow its `register` callback to return `void` or `Promise<void>` and await it for discovery and execution. Each request creates a fresh registry so an extension can load saved configuration, describe enabled workspaces, and reject commands removed since discovery. Registration errors retain the existing response/error contract.
+
+Check supplied active-tab context before and after registration, since asynchronous loading can outlive that snapshot. Providers still own state validation and action side effects. Registration only loads/describes capabilities; it does not execute them. Keep it within the existing three-second response budget. The 50-command descriptor limit and explicit pairing remain in effect.
+
+**Implementation:** [SDK extension transport](https://github.com/web-relay/web-relay/blob/main/packages/sdk/src/extension.ts), [isolated package verification](https://github.com/web-relay/web-relay/blob/main/tests/sdk-package.mjs), and [Chromium async registration test](https://github.com/web-relay/web-relay/blob/main/tests/sdk-extension.mjs). See the [integration guide](/guides/extensions/#commands-from-saved-configuration). SDK 0.1.2 introduces async registration; synchronous registrations remain supported.
+
+**Remaining work:** Pairing diagnostics, searchable structured choices, and durable invocation/status contracts are separate improvements. The launcher does not continuously receive configuration changes.

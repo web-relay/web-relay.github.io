@@ -3,11 +3,11 @@ title: Enable an extension provider
 description: Add capabilities to an existing Chromium extension with the SDK and explicitly pair it with the launcher.
 ---
 
-Keep your extension in its own folder or repository. Install the [SDK tarball](/guides/sdk/) in that project and use its existing browser bundler. The launcher does not require the example PWA or GitHub provider.
+Keep your extension in its own folder or repository. Install the [SDK](/guides/sdk/) in that project and use its existing browser bundler. The launcher does not require the example PWA or GitHub provider.
 
 ## Register in the service worker
 
-At worker startup, register the external listener synchronously. Action functions may be asynchronous:
+At worker startup, call `createExtensionProvider` synchronously to attach the external listener. Its `register` callback and action functions may be asynchronous:
 
 ```ts
 import {
@@ -39,6 +39,36 @@ createExtensionProvider({
 Choose your own provider/capability IDs and application behavior. `context` is an optional `{ tabId, url }` snapshot. The SDK verifies that supplied context still matches the active tab before discovery/execution. Re-evaluate application state in `when` or your action; the SDK does not own your domain state.
 
 For `input: 'text'` commands, `run(context, input)` receives the validated text. Results must be JSON or void. Keep errors actionable. A timeout is not cancellation, so do not automatically repeat an account write after an uncertain result.
+
+## Commands from saved configuration
+
+You can read browser storage directly inside `register`. The SDK awaits the callback before listing or executing commands, with a new registry for each request. Call `createExtensionProvider` at the top level; do not await storage before calling it.
+
+```ts
+createExtensionProvider({
+  providerId: 'workspaces',
+  launcherId: LAUNCHER_ID, // Replace with your paired launcher's actual ID.
+  async register(registry) {
+    // This extension owns and validates the saved workspace schema.
+    const workspaces = await loadSavedWorkspaces();
+    for (const workspace of workspaces.filter(item => item.enabled)) {
+      registry.register({
+        id: `workspaces.open-${workspace.id}`,
+        title: `Open ${workspace.name}`,
+        run: () => openWorkspace(workspace.id),
+      });
+    }
+  },
+});
+```
+
+`loadSavedWorkspaces` and `openWorkspace` are your extension's functions. Use stable IDs that satisfy the capability ID rules, and keep titles within 120 characters. The launcher accepts at most 50 commands per provider. Validate saved configuration rather than silently truncating the list.
+
+Registration runs on discovery and again on execution. A removed or disabled workspace is therefore absent from the execution registry and returns `NOT_FOUND`. Thrown registration errors are returned using the same error contract as action failures; use `CapabilityError` for an actionable message. Keep registration free of action side effects and fast enough for the launcher's three-second response timeout. Requests may overlap, so keep request-specific data in the callback rather than a shared mutable registry.
+
+Supplied tab context is checked before and after registration. Changes made after registration, including during the action itself, still require provider-owned checks when relevant. The launcher refreshes on open, manual refresh, and after invocation; saved changes do not automatically update an already-open palette.
+
+Async registration requires SDK **0.1.2 or later**. Install it with `pnpm add @web-relay/sdk@0.1.2`, or build a development tarball from the [runtime source](https://github.com/web-relay/web-relay/blob/main/packages/sdk/src/extension.ts). Older installed SDKs do not await registration.
 
 ## Manifest and build
 
