@@ -41,6 +41,6 @@ The first milestone includes PWA integration, one extension provider, and browse
 
 ## Independent LLM provider
 
-The separate `llm-provider-extension` folder uses the extension SDK to register ChatGPT and Gemini actions. It opens a fresh destination tab and sends one message with the source URL as context. It uses app-specific content scripts rather than an undocumented prompt URL. If login or changed controls prevent sending, the destination panel retains the prompt for manual use. Source page contents are not extracted.
+The separate `llm-provider-extension` folder uses the extension SDK to register ChatGPT and Gemini actions. Its ChatGPT action copies a prompt containing the source URL and opens ChatGPT for user paste/send. Automatic composer filling was unreliable, and no supported prompt deep link has been verified. Its Gemini action still uses an app-specific content script to start a fresh chat and submit once. If login or changed Gemini controls prevent sending, the destination panel retains the prompt for manual use. Source page contents are not extracted.
 
 The development build bundles shared SDK source from the sibling checkout; the installed extension has no filesystem dependency. Fixed manifest public keys and an explicit paired provider ID keep discovery reproducible. Published SDK packages and generic enrollment remain future work. See [installation and validation](/project/showcase/#separate-llm-provider).

@@ -114,3 +114,15 @@ The destination content script consumes a tab-bound, expiring session handoff. O
 The launcher explicitly pairs this additional development provider ID. The provider requests access only to ChatGPT and Gemini, and accepts cross-extension requests only from the launcher. General provider enrollment remains deferred. This adds an app-specific integration alongside decision 007's existing clipboard handoffs.
 
 **Validation:** Full Chromium with both independently installed extensions and controlled destination fixtures; discovery, routing, fresh chat, URL preservation, one submission, reload replay prevention, ordinary-chat isolation, and login fallback. Live logged-in account behavior still needs manual verification because selectors can change.
+
+## 010 — Provider-owned AI actions, system theme, and current-window tabs
+
+**Status:** Implemented local integration · **Date:** 3 October 2026
+
+Remove the launcher's built-in ChatGPT and Gemini handoffs. AI actions belong to the separate LLM provider. Its ChatGPT action now copies the page-context prompt and opens ChatGPT for user paste/send because automatic filling was unreliable and a supported prompt deep link has not been verified. Remove ChatGPT content-script matches and host permission. Retain Gemini's working fresh-chat and single-submission behavior. This supersedes the current behavior described in decisions 007 and 009.
+
+Follow the system light/dark theme in both the injected dialog and diagnostic document. Discover tabs in the source tab's window; present them as searchable local capabilities and support keyboard switching. Exclude other windows, re-discover before execution, and reject vanished or moved targets. No extra permissions are required.
+
+Search matches every word across title, description, and provider ID, allowing `tabs github` and `llm gemini`. A Raycast-style provider scope entered by typing `llm` and pressing Tab remains a proposal. The proposed scope would preserve the original page context, show only that provider's commands, and return to global search with Escape or Backspace. It needs a separate UX decision before implementation.
+
+**Validation:** Registry/protocol checks and full Chromium tests for actual toolbar injection, dark/light styles, AI command removal, exclusion of other-window tabs, keyboard switching, ChatGPT clipboard handoff without submission, and retained Gemini delivery/fallback. Destination sites remain fixtures, not real-account automation tests.

@@ -44,7 +44,7 @@ The current prototype still pairs known GitHub and LLM provider IDs and two demo
 
 The separate `llm-provider-extension` folder demonstrates an integration outside the monorepo. It uses `@web-relay/sdk/extension` and is built and installed independently. Its development build resolves the shared SDK from the sibling checkout; npm distribution remains deferred.
 
-The notes PWA exposes create and pin actions through the SDK and its local palette. The launcher is now an injected dialog inside the active page. It discovers the active demo app, the paired GitHub extension, and browser/AI handoff actions. GitHub capabilities navigate repository pages without DOM selectors or account writes. See the [showcase guide](/project/showcase/) for setup.
+The notes PWA exposes create and pin actions through the SDK and its local palette. The launcher is now an injected dialog inside the active page. It discovers the active demo app, the paired GitHub extension, the paired LLM provider, browser actions, and tabs in the current window. GitHub capabilities navigate repository pages without DOM selectors or account writes. See the [showcase guide](/project/showcase/) for setup.
 
 The documentation remains in [web-relay.github.io](https://github.com/web-relay/web-relay.github.io), publishing at the organization’s root URL. Update it as implementation reveals details and decisions are accepted.
 

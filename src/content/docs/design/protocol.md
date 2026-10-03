@@ -55,7 +55,7 @@ The caller validates version, response shape, matching request ID, JSON data, me
 
 **Provider extensions:** the launcher uses `chrome.runtime.sendMessage` with the known provider extension ID. Each provider accepts requests only from the paired development launcher ID. The separate LLM provider uses `createExtensionProvider` from `@web-relay/sdk/extension` for validation, provider-owned registration, execution, and response envelopes.
 
-**Browser:** built-in commands use the local registry. Clipboard results are copied by the foreground UI. AI handoffs copy the question or URL first, then ask the broker to open an allowlisted ChatGPT or Gemini destination. No prompt is automatically submitted.
+**Browser:** built-in commands use the local registry. Clipboard results are copied by the foreground UI. The LLM provider’s ChatGPT action returns a clipboard prompt and destination. The UI copies it before asking the broker to open the allowlisted destination. The user pastes and sends it. Gemini submission remains inside the provider. Tabs use a local registry populated from the current window; execution rechecks that the selected tab still exists in that window.
 
 **Injected UI:** a toolbar action or shortcut grants `activeTab` access. The broker injects an isolated content script that mounts the launcher in a Shadow DOM. Internal panel messages require this extension’s own top-frame sender and bind execution to its tab and URL. Real user activation is required for UI action clicks and keyboard execution; page-generated clicks are ignored.
 
@@ -63,7 +63,7 @@ The caller validates version, response shape, matching request ID, JSON data, me
 
 The launcher discovers capabilities when opened or refreshed and after executing an action. It does not persist capability lists across service-worker suspension. Provider enablement preferences are persisted separately.
 
-Active-app commands appear before global browser commands. Search currently uses substring matching. Source statuses identify connected, unavailable, and disabled providers.
+Active-app commands appear before global browser commands. Search requires every query word to match a substring across title, description, or provider ID. Provider-scoped navigation and fuzzy ranking remain proposals. Source statuses identify connected, unavailable, and disabled providers.
 
 An already-open launcher does not receive pushed app-state updates. A manual refresh picks up changes; execution always rechecks availability, even if the visible list is old.
 

@@ -53,13 +53,13 @@ Visit [the runtime repository](https://github.com/web-relay/web-relay) and open 
 
 The provider also exposes **Open Web Relay repository** from any tab. These actions navigate GitHub URLs; they do not write account data, call an authenticated API, or depend on DOM selectors.
 
-## Send a question or link to an AI web app
+## Theme and tab switching
 
-**Prepare question for a new ChatGPT chat** opens a small input form. Enter a question, then choose **Copy question & open ChatGPT**. The launcher copies the question and opens `https://chatgpt.com/`. Paste and send it in ChatGPT.
+The injected launcher and diagnostic popup follow the system light/dark theme. Open the launcher on any normal website and type `tabs` to list tabs from that window. Search matches tab titles and URLs. Use ↑/↓ to select and Enter to switch; tabs in other windows are excluded.
 
-**Share current link with Gemini** copies the active page URL and opens `https://gemini.google.com/app`. Paste the link there and add your question.
+Search matches every word across titles, descriptions, and provider IDs. For example, `tabs github` finds matching tabs and `llm gemini` narrows to the Gemini provider action. Explicit provider scopes entered with Tab are a design proposal, not current behavior.
 
-These are copy-and-open handoffs. They do not submit prompts automatically or claim a supported prompt-submission URL API. No ChatGPT or Gemini host permissions, API keys, or DOM automation are used. See the official [ChatGPT web guide](https://learn.chatgpt.com/docs/web) and [Gemini guide](https://support.google.com/gemini/answer/13275745?hl=en) for sending messages in those apps.
+AI actions are supplied by the separate LLM provider described below. There are no built-in ChatGPT or Gemini actions in the launcher.
 
 ## Dismissal and action delivery
 
@@ -92,7 +92,7 @@ The test starts the local server if needed and loads both real extensions in per
 
 Tests exercise SDK and local palette execution, content-script discovery, cross-extension messaging, contextual availability, stale requests, provider disabling, clipboard writes, browser navigation, persistence, and offline loading.
 
-GitHub tests intercept navigation with URL fixtures, so they do not interact with an account. The injected-UI suite triggers the actual toolbar action using Chromium’s extension debugging API and tests the dialog on the host page. It covers `activeTab` injection on GitHub, question input, clipboard handoffs, and dismissal. The earlier diagnostic-document suite still tests core routing and browser actions. ChatGPT and Gemini destination pages are also fixtures; no prompts are submitted. Screenshots are saved in `test-results/`.
+GitHub tests intercept navigation with URL fixtures, so they do not interact with an account. The injected-UI suite triggers the actual toolbar action using Chromium’s extension debugging API and tests the dialog on the host page. It covers `activeTab` injection on GitHub, dark/light themes, current-window tab filtering, keyboard tab switching, built-in AI removal, and dismissal. The earlier diagnostic-document suite still tests core routing and browser actions. ChatGPT and Gemini destination pages are also fixtures; no prompts are submitted. Screenshots are saved in `test-results/`.
 
 ## Development limits
 
@@ -104,8 +104,8 @@ Read the [implemented contract](/design/protocol/) and [trust controls](/design/
 
 A separate `llm-provider-extension` folder beside the runtime checkout contains the LLM integration. In that folder, run `pnpm install`, `pnpm check`, and `pnpm build`, then load its `dist` directory as an unpacked extension. Rebuild and reload the launcher to discover the new paired provider.
 
-On an HTTP(S) page, choose **New ChatGPT chat with current page** or **New Gemini chat with current page**. The provider opens a new tab and sends “Please help me understand this page. Use this link as context:” followed by the current URL. It does not read the source page's contents. The model may be unable to access private or local links.
+On an HTTP(S) page, choose **New ChatGPT chat with current page** or **New Gemini chat with current page**. Both actions use “Please help me understand this page. Use this link as context:” followed by the current URL. ChatGPT copies this prompt and opens a new tab; paste and send it yourself. Gemini opens a fresh chat and automatically submits the prompt once. It does not read the source page's contents. The model may be unable to access private or local links.
 
-Sign in to the destination service first. If the composer cannot be found or filled, a Web Relay panel retains the prompt for copying and manual sending. Automatic sending makes one attempt and is not replayed on reload. The existing built-in clipboard handoff commands remain available separately.
+For ChatGPT, press Ctrl+V (Cmd+V on macOS), review the copied prompt, and send it. Automatic composer filling proved unreliable, and a supported prompt deep link has not been verified. The provider therefore requests no ChatGPT host access. For Gemini, sign in first. If its composer cannot be found or filled, a Web Relay panel retains the prompt for copying and manual sending. Gemini makes one send attempt and does not replay it on reload.
 
 Chromium integration tests use fixtures rather than real accounts. Verify the installed extension with your logged-in ChatGPT and Gemini sessions; web UI controls can change.
