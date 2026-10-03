@@ -12,7 +12,7 @@ The development showcase implements the controls below, but has not undergone a 
 ## Current development controls
 
 - The PWA bridge checks same-window source and exact origin, and only runs in the top frame at `http://localhost:4173` or `http://127.0.0.1:4173`.
-- The launcher targets explicitly configured extension IDs in `src/providers.ts`, defaulting to the development GitHub and LLM providers. Each provider allows only the paired launcher ID through `externally_connectable` and a sender check.
+- The launcher targets bundled GitHub/LLM defaults plus extension IDs explicitly approved in its Options page and saved locally. Settings checks connectivity and rechecks identity at approval; provider names are self-reported. Only the extension settings document can change pairings. Additional providers receive no tab context unless URL sharing is approved. Each provider allows only the paired launcher ID through `externally_connectable` and a sender check.
 - The injected UI’s privileged messages require this extension’s own top-frame sender, bound to its tab and URL. The extension’s own diagnostic document is also permitted. Page-bridge messages cannot invoke the panel API, and synthetic page clicks do not execute UI actions.
 - Wire requests and responses validate protocol version, request correlation, JSON shape, capability IDs, and provider identity.
 - Active tab ID and URL are rechecked before invocation; app availability is rechecked in the owning registry.

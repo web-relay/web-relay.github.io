@@ -11,7 +11,7 @@ Different providers feed one internal model. Explicit app integrations should ta
 
 A self-developed app registers its own actions through the proposed core SDK. The bridge makes them discoverable by the extension, while the optional local UI provides a fallback.
 
-The target is a small integration: register the app’s existing functions and publish relevant context. SDK 0.1.0 has a standalone development tarball with JavaScript and declarations. It is not published on npm. Follow the [PWA integration guide](/guides/pwa/) to install and pair it.
+The target is a small integration: register the app’s existing functions and publish relevant context. SDK 0.1.3 is published on npm and also supports a standalone development tarball with JavaScript and declarations. Follow the [PWA integration guide](/guides/pwa/) to install and pair it.
 
 ## 2. Native WebMCP — standards adapter
 
@@ -43,4 +43,4 @@ The first milestone includes PWA integration, one extension provider, and browse
 
 The separate `llm-provider-extension` folder uses the extension SDK to register ChatGPT and Gemini actions. Its ChatGPT action copies a prompt containing the source URL and opens ChatGPT for user paste/send. Automatic composer filling was unreliable, and no supported prompt deep link has been verified. Its Gemini action still uses an app-specific content script to start a fresh chat and submit once. If login or changed Gemini controls prevent sending, the destination panel retains the prompt for manual use. Source page contents are not extracted.
 
-The development build consumes the standalone SDK tarball produced by the sibling checkout; the installed extension has no filesystem dependency. Fixed manifest public keys and an explicit paired provider ID keep discovery reproducible. npm publication and a user-facing enrollment UI remain future work. Explicit source pairing is configurable now. See [extension integration](/guides/extensions/) and [PWA integration](/guides/pwa/). See [installation and validation](/project/showcase/#separate-llm-provider).
+The development build consumes the standalone SDK tarball produced by the sibling checkout; the installed extension has no filesystem dependency. Fixed manifest public keys and an explicit paired provider ID keep discovery reproducible. Additional extension pairing is available through launcher settings; PWA pairing still uses source/manifest configuration. See [extension integration](/guides/extensions/) and [PWA integration](/guides/pwa/). See [installation and validation](/project/showcase/#separate-llm-provider).

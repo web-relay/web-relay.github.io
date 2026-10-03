@@ -96,7 +96,7 @@ GitHub tests intercept navigation with URL fixtures, so they do not interact wit
 
 ## Development limits
 
-SDK 0.1.0 builds as a standalone tarball with bundled JavaScript and TypeScript declarations, but is not published on npm. See [installation and integration](/guides/sdk/). Question actions support bounded text input; ordinary actions need no arguments. Injection is blocked on browser internal pages such as `chrome://` and other protected pages. The extension shows a badge if it cannot inject; try on an ordinary website. The bridge trusts only the demo origins and the known `demo-notes` provider. Automatic provider enrollment, general input schemas, continuously pushed discovery, fuzzy search ranking, production permission onboarding, and workflow composition remain future work.
+SDK 0.1.3 is published on npm and can also be built as a standalone development tarball with bundled JavaScript and TypeScript declarations. Launcher 0.0.2 lets users approve additional extension providers in settings without rebuilding. See [installation and integration](/guides/sdk/). Question actions support bounded text input; ordinary actions need no arguments. Injection is blocked on browser internal pages such as `chrome://` and other protected pages. The extension shows a badge if it cannot inject; try on an ordinary website. The bridge trusts only the demo origins and the known `demo-notes` provider. Automatic provider enrollment, general input schemas, continuously pushed discovery, fuzzy search ranking, production permission onboarding, and workflow composition remain future work.
 
 Read the [implemented contract](/design/protocol/) and [trust controls](/design/security/) before extending the integration.
 

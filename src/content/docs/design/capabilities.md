@@ -11,7 +11,7 @@ The examples describe the intended developer experience. They are not a working 
 
 ## Working development SDK
 
-The notes showcase uses internal `@web-relay/core` and `@web-relay/protocol` packages. SDK 0.1.0 is independently consumable as a development tarball with bundled JavaScript and declarations; it is not published on npm. See [SDK installation and API](/guides/sdk/).
+The notes showcase uses internal `@web-relay/core` and `@web-relay/protocol` packages. SDK 0.1.3 is independently consumable from npm or as a development tarball with bundled JavaScript and declarations. See [SDK installation and API](/guides/sdk/).
 
 ```ts
 import { createLauncher } from '@web-relay/sdk';

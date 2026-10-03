@@ -150,3 +150,15 @@ Check supplied active-tab context before and after registration, since asynchron
 **Implementation:** [SDK extension transport](https://github.com/web-relay/web-relay/blob/main/packages/sdk/src/extension.ts), [isolated package verification](https://github.com/web-relay/web-relay/blob/main/tests/sdk-package.mjs), and [Chromium async registration test](https://github.com/web-relay/web-relay/blob/main/tests/sdk-extension.mjs). See the [integration guide](/guides/extensions/#commands-from-saved-configuration). SDK 0.1.2 introduces async registration; synchronous registrations remain supported.
 
 **Remaining work:** Pairing diagnostics, searchable structured choices, and durable invocation/status contracts are separate improvements. The launcher does not continuously receive configuration changes.
+
+## 013 — User-approved extension pairing in launcher settings
+
+**Status:** Implemented launcher 0.0.2 and SDK 0.1.3 · **Date:** 3 October 2026
+
+Allow additional installed extensions to be paired without editing/rebuilding the launcher. A privileged extension Options page checks an entered extension ID, displays the reported identity, and asks for explicit approval. A short-lived, settings-document-bound proposal is rechecked at approval. Persist approved pairings locally, serialize changes, reserve built-in IDs, and support disable/removal. URL-context sharing is off by default and explicitly selectable at approval. No new launcher permissions are required. Existing bundled defaults remain available.
+
+Add an optional `name` and context-free `describe` request to the extension SDK's version 1 protocol. Validate the paired sender, then return identity without registration or action execution, allowing empty providers to pair. Older providers can use validated nonempty discovery. The provider must still allow the actual launcher ID. PWA enrollment and new-origin manifest handling remain separate.
+
+**Implementation:** [Pairing manager](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/pairing.ts), [settings UI](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/options.ts), and [Chromium pairing checks](https://github.com/web-relay/web-relay/blob/main/tests/pairing.mjs). See [pairing instructions](/guides/extensions/#pair-it-with-the-launcher).
+
+**Validation:** Real Chromium discovery/invocation after user approval, empty-provider identity, older discovery fallback, disabled/removed stale commands, default context privacy and approved sharing, duplicate/reserved/changed identities, settings-only management, synthetic-click rejection, and persistence across browser/worker restart. Isolated package tests verify the new SDK response and declarations.

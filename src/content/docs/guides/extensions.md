@@ -18,6 +18,7 @@ import {
 
 createExtensionProvider({
   providerId: 'my-extension',
+  name: 'My extension',
   launcherId: LAUNCHER_ID,
   register(registry) {
     registry.register({
@@ -91,22 +92,21 @@ Bundle the SDK into the worker using your existing build. Install the resulting 
 
 ## Pair it with the launcher
 
-In the launcher checkout, edit `apps/launcher-extension/src/providers.ts`:
+Install [launcher 0.0.2 or later](https://github.com/web-relay/web-relay/releases/tag/launcher-v0.0.2) once to enable settings-based pairing. Open **Capability sources → Manage extension providers**, or open the launcher's **Options** page from `chrome://extensions`.
 
-```ts
-export const extensionProviders: ExtensionProvider[] = [
-  // Keep existing entries as needed.
-  {
-    providerId: 'my-extension',
-    name: 'My extension',
-    extensionId: 'the-actual-32-letter-extension-id',
-  },
-];
-```
+1. Paste the provider's installed 32-letter extension ID.
+2. Select **Check connection**. The launcher checks the protocol response and reported identity without sharing tab context or executing an action.
+3. Review the name, provider ID, extension ID, and protocol version. Names are self-reported: compare the extension ID with the extension you installed.
+4. Choose whether to **Share the current tab's URL**. This is off by default. If enabled, the provider receives the tab ID and full URL on discovery and execution; page contents are not shared.
+5. Select **Approve pairing**, then refresh the launcher to discover commands.
 
-Use the same `providerId` as the SDK registration and a real Chromium ID. The SDK package is not a discovery mechanism. Rebuild the launcher with `pnpm build` and reload it in `chrome://extensions`.
+Approved pairings are saved in this browser profile and survive browser/service-worker restarts. Adding another extension does not require source edits or rebuilding the launcher. Settings lets you disable, enable, or remove saved pairings. Removing/disabling a provider prevents future invocation of its old displayed commands; it does not cancel an action already delivered. To change URL sharing, remove the pairing and approve it again with the desired choice.
 
-By default, the provider receives active-tab context. An optional `contextOrigins: ['https://example.com']` limits which origins receive that context; global commands may still be discovered with `undefined` context elsewhere. The launcher validates descriptor ownership and routes by the configured provider ID. An optional `enabledSetting` links an entry to a persisted preference; the current UI exposes only the GitHub preference, not a general provider settings screen.
+The provider must still allow the launcher's actual ID in both its manifest and SDK `launcherId`. A failed connection check points to an unloaded extension, mismatched IDs, or an incompatible/malformed protocol response. No additional launcher host permissions or automatic scan of installed extensions are needed. Pairings are limited to 20 additional providers, with unique provider IDs and extension IDs; built-in identities are reserved.
+
+SDK **0.1.3** adds optional `name` and a sender-validated `describe` response, so an extension can pair even when it has no commands. This response does not run `register` or actions. Older SDK providers can pair through discovery when at least one command is available; the provider ID becomes the review label. Protocol version 1 remains in use.
+
+Bundled GitHub/LLM defaults remain in `apps/launcher-extension/src/providers.ts`. An optional `contextOrigins` filters context for those defaults; `enabledSetting` retains the GitHub preference. [PWA origins](/guides/pwa/) still require source and manifest configuration. Installing the SDK alone never approves pairing.
 
 ## Verify
 

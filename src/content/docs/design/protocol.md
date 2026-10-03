@@ -3,13 +3,13 @@ title: Discovery and invocation contract
 description: The implemented version 1 development protocol and its trust and lifecycle boundaries.
 ---
 
-The showcase uses a small, JSON-only protocol shared by the launcher, PWA bridge, GitHub provider, and separate LLM provider. It supports **discovery**, **execution without arguments**, and **bounded text input** for question actions. Broader schemas and a user-facing enrollment UI remain deferred. Explicit local pairing is configurable in the launcher source; see the [SDK integration guides](/guides/sdk/).
+The showcase uses a small, JSON-only protocol shared by the launcher, PWA bridge, GitHub provider, and separate LLM provider. It supports **discovery**, **execution without arguments**, and **bounded text input** for question actions. Extension enrollment is available through launcher settings; broader schemas and PWA enrollment UI remain deferred. See the [SDK integration guides](/guides/sdk/).
 
 ## Provider-owned registries
 
 Each provider retains its functions and live context. Discovery returns descriptors containing `id`, `title`, optional `description` and `input: "text"`, `providerId`, and `providerKind`. The launcher combines these descriptors and routes an invocation to its owner.
 
-Default providers are `demo-notes` (`pwa`), `github` and `llm` (`extension`), and `browser` and `tabs` (`browser`). Additional paired sources are configured in `apps/launcher-extension/src/providers.ts`. Capability IDs are unique within a provider; routing uses provider identity and capability ID together.
+Default providers are `demo-notes` (`pwa`), `github` and `llm` (`extension`), and `browser` and `tabs` (`browser`). Additional extension pairings are approved in settings and saved locally. Bundled defaults and PWA origins remain in `apps/launcher-extension/src/providers.ts`. Capability IDs are unique within a provider; routing uses provider identity and capability ID together.
 
 ## Requests
 
@@ -29,6 +29,12 @@ Default providers are `demo-notes` (`pwa`), `github` and `llm` (`extension`), an
 An execution request uses `"type": "execute"` and adds `"capabilityId": "github.repo-issues"`. A text-input execution request also includes `"input": "your question"`, limited to 2000 characters. The registry requires nonblank text for a text-input capability and rejects arguments for no-input capabilities. The caller generates a fresh request ID. Unsupported versions and malformed messages are ignored by provider listeners and rejected by the caller if they do not produce a valid correlated response.
 
 Tab context is optional. The GitHub provider receives it only for GitHub.com tabs; its global project-navigation action needs no repository context. The LLM provider receives HTTP(S) source-tab context and uses its URL as the first message context for a new chat. PWA application context remains local and is supplied by the SDK registry’s context callback.
+
+## Extension identity for pairing
+
+SDK 0.1.3 accepts a context-free `"type": "describe"` request and replies with `{ "providerId": "workspaces", "name": "Saved workspaces", "protocolVersion": 1 }` in the ordinary correlated success envelope. It validates the paired launcher sender first, then answers without registration or actions. Names are provider-reported rather than verified browser/store names. PWA SDKs reject this extension-only request.
+
+The settings page checks connectivity, reviews identity, and explicitly approves a short-lived proposal bound to that settings document. Approval rechecks identity before storing the pairing. Older extension providers may ignore `describe`; the launcher can fall back to validated nonempty discovery. It cannot infer an older provider's identity from an empty command list. Disabled/removed providers cannot route future invocations. Current-tab context is only sent to additional providers when the user approves URL sharing.
 
 ## Responses
 
@@ -84,4 +90,4 @@ Errors include unavailable commands, stale context, invalid responses, disconnec
 
 The UI may close after dispatch; actions do not need to return a result. Returned errors are displayed while it remains open. Errors refreshing commands after delivery are kept separate from execution errors.
 
-This version does not provide general input schemas, cancellation, retries, idempotency guarantees, automatic or user-facing extension enrollment, or workflow chaining. Development allowlists and fixed manifest keys are explicit prototype decisions, not a production onboarding system.
+This version does not provide general input schemas, cancellation, retries, idempotency guarantees, automatic enrollment or PWA enrollment UI, or workflow chaining. Development allowlists and fixed manifest keys are explicit prototype decisions, not a production onboarding system.

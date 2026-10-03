@@ -8,6 +8,8 @@ The project is currently a **working local showcase**. A notes PWA, launcher ext
 ## Implemented showcase
 
 - Provider-owned registry with registration, unregister, and fresh availability checks.
+- Async extension registration from saved configuration.
+- Settings-based extension pairing, connection checks, explicit approval, optional tab-URL sharing, and disable/removal.
 - Notes PWA using the SDK and a local palette, with persisted notes and an offline shell.
 - Injected launcher dialog, search and keyboard navigation, active-tab discovery, source labels, and errors.
 - Independent GitHub.com extension for repository navigation.
@@ -21,7 +23,7 @@ GitHub tests use intercepted URL fixtures. They exercise real cross-extension me
 
 ## Remaining before a broader MVP release
 
-Generic provider enrollment and approval, general input schemas, production permission onboarding, broader lifecycle testing, and search ranking still need work. Search currently matches substrings rather than implementing fuzzy scoring. Discovery refreshes on open, refresh, and after invocation; provider updates do not continuously push into an open launcher.
+PWA enrollment UI, general input schemas, production permission onboarding, broader lifecycle testing, and search ranking still need work. Search currently matches substrings rather than implementing fuzzy scoring. Discovery refreshes on open, refresh, and after invocation; provider updates do not continuously push into an open launcher.
 
 ## Phase 1 — prove the local loop
 

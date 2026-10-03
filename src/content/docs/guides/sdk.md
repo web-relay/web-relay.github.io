@@ -5,11 +5,11 @@ description: Build and consume the standalone SDK package, and distinguish packa
 
 ## Distribution status
 
-`@web-relay/sdk` version **0.1.2** provides bundled ESM JavaScript and TypeScript declarations for both PWAs and Chromium extensions, with no runtime npm dependencies. Install the published package in your existing project:
+`@web-relay/sdk` version **0.1.3** provides bundled ESM JavaScript and TypeScript declarations for both PWAs and Chromium extensions, with no runtime npm dependencies. Install the published package in your existing project:
 
 ```sh
-pnpm add @web-relay/sdk@0.1.2
-# or: npm install @web-relay/sdk@0.1.2
+pnpm add @web-relay/sdk@0.1.3
+# or: npm install @web-relay/sdk@0.1.3
 ```
 
 For development, build and install a tarball from the runtime source.
@@ -21,10 +21,10 @@ pnpm install --frozen-lockfile
 pnpm pack:sdk
 ```
 
-This creates `artifacts/web-relay-sdk-0.1.2.tgz`. Install it from a separate project:
+This creates `artifacts/web-relay-sdk-0.1.3.tgz`. Install it from a separate project:
 
 ```sh
-pnpm add /absolute/path/to/web-relay/artifacts/web-relay-sdk-0.1.2.tgz
+pnpm add /absolute/path/to/web-relay/artifacts/web-relay-sdk-0.1.3.tgz
 ```
 
 CI also uploads a `web-relay-sdk` tarball artifact in the [runtime repository](https://github.com/web-relay/web-relay/actions). Download and install that file when testing development changes. A CI artifact is distinct from an npm release. Tarball installation adds the SDK to your project's package dependencies. Use your existing browser bundler; no workspace TypeScript path aliases or private core/protocol packages are required.
@@ -47,9 +47,11 @@ Extension `createExtensionProvider` attaches its listener immediately and accept
 
 ## Pairing and limits
 
-SDK installation does not automatically register a provider with the launcher. The explicit local configuration is `apps/launcher-extension/src/providers.ts`. [Extension pairing](/guides/extensions/) requires the actual provider extension ID. [PWA pairing](/guides/pwa/) requires an exact origin and provider ID, plus matching launcher manifest access. Rebuild and reload the launcher after editing these files.
+SDK installation does not automatically register a provider with the launcher. Launcher **0.0.2** supports [extension pairing through settings](/guides/extensions/#pair-it-with-the-launcher): check an installed extension ID, review the identity, then approve. Additional pairings are saved locally, with tab-URL sharing off by default. Settings can disable or remove them. New extension pairings need no launcher rebuild.
 
-This configuration centralizes discovery and routing; it is not a user-facing enrollment UI or automatic scan of installed extensions. General schemas, workflow composition, and production enrollment remain deferred.
+SDK **0.1.3** responds to `describe` with `{providerId, name, protocolVersion: 1}`, without loading commands or running actions. `createExtensionProvider` accepts optional `name`, defaulting to the provider ID. This allows pairing when no commands are available. Older providers can pair through validated discovery if they expose at least one command.
+
+The provider must still authorize the actual launcher ID. Bundled defaults and [PWA origins](/guides/pwa/) remain in `apps/launcher-extension/src/providers.ts`. PWAs at new hosts still require matching launcher manifest access and a rebuild/reload. This release does not scan installed extensions or add general input schemas, workflow composition, or PWA enrollment UI.
 
 ## Coding agents
 
