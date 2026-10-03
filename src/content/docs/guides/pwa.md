@@ -33,34 +33,36 @@ app.registry.register({
 
 An optional local palette can use `app.registry.list()` and `app.registry.execute(id, input)` without the browser extension. Use the same registrations so availability and behavior stay consistent. Registration returns an unregister function for capabilities that are removed during the app's lifecycle.
 
-## Configure the launcher
+## Pair in launcher settings
 
-In `apps/launcher-extension/src/providers.ts`, add the exact origin and matching provider ID:
+Development launcher **0.0.3** supports PWA pairing without editing source or rebuilding for each host:
 
-```ts
-export const pwaProviders = [
-  // Keep existing entries as needed.
-  {
-    providerId: 'my-notes',
-    name: 'My notes app',
-    origins: ['https://notes.example.com'],
-  },
-];
-```
+1. Open exactly one tab at the app URL, such as `https://page-apps.github.io/`.
+2. Open launcher Options (Capability sources → Manage extension providers), then **Pair a web app**.
+3. Enter the full app URL and click **Check app connection**. Approve Chromium's host access prompt.
+4. Review the self-reported provider identity, exact origin, and path, then click **Approve app pairing**.
+5. Return to the app and refresh the launcher. Existing open tabs receive the bridge on demand.
 
-Origins include scheme, host, and port, but no path or trailing slash. `http://localhost:5173` is different from `http://127.0.0.1:5173`. Configure one provider identity per origin; the first matching entry is used. Arbitrary page scripts are not auto-enrolled.
+Reload the built launcher once when upgrading from 0.0.2. Host access alone does not enroll an app. Pairing proposals expire after five minutes, belong to the settings document, and are rechecked before saving. Missing permission, multiple matching tabs, missing SDK listeners, changed identities and invalid responses appear as actionable diagnostics.
 
-Also add the host to `apps/launcher-extension/public/manifest.json`:
+The root path `/` pairs only the home page. Other paths, such as `/quick-log/`, match that path and its subpages, with segment boundaries. Pair sibling GitHub Pages apps separately; pairing `https://page-apps.github.io/` does not pair `/quick-log/`. Exact scheme, host and port still matter. Chromium host permission covers more paths and ports than app routing; Web Relay checks the approved origin and path independently. Paths route apps but are not a security boundary between same-origin scripts.
 
-- `host_permissions`: add `https://notes.example.com/*`.
-- Existing bridge `content_scripts[0].matches`: add `https://notes.example.com/*`.
+Saved apps can be disabled, enabled, or removed in settings. Removing a pairing stops routing; host permission remains until revoked in Chromium extension site settings because another app may share the host. Revoking host permission prevents further discovery and execution.
 
-Keep existing hosts that you still use. The browser match pattern grants host access; the bridge separately checks the exact configured origin and top frame. Do not replace this with unrestricted access to all sites.
+The development SDK adds optional `name` and PWA `describe`, plus requests addressed with `providerId`. A mounted registry ignores another provider's addressed requests. Published SDK 0.1.3 can pair via nonempty validated discovery and supports separate apps on different paths. Multiple registries mounted simultaneously on one page need the development tarball. These SDK changes have not been published as a new npm release.
 
-Rebuild the launcher (`pnpm build`), reload the extension, and reload the app tab so its bridge script is installed. The PWA build owns the app's SDK code; the launcher build owns provider configuration and content-script access.
+Bundled development defaults remain in `apps/launcher-extension/src/providers.ts`; they retain their manifest access. Launcher 0.0.2 and older still require source `pwaProviders`, matching manifest host permissions/content scripts, rebuild, and reload for additional PWA hosts.
+
+## Registration and lifecycle
+
+Use at most 50 registered commands per PWA/extension registry. IDs are at most 80 characters; titles are nonblank and at most 120; descriptions are nonblank and at most 300. The development SDK rejects invalid metadata and the 51st command during registration, matching discovery validation.
+
+`dispose()` removes the listener but does not cancel already-running actions; an in-flight reply can still be posted after disposal. Request IDs are not deduplicated, so repeated requests can repeat side effects. A navigation timer does not acknowledge that the extension received a result. Reliable result-before-navigation acknowledgement remains future work.
 
 ## Verify
 
 Open the app in a normal Chromium tab and invoke the launcher. Check that your provider appears, that an action executes in the app, and that changes to selected state affect availability after refresh. Execute a stale selection and confirm the registry checks `when` again. Test returned errors, app teardown/remount, and an unconfigured origin. Same-origin code is trusted; the bridge is not a defense against malicious scripts already running inside your app.
 
-The app does not require a backend, a global registry, or an always-running extension worker. Discovery is pulled when the launcher opens/refreshes and before execution. Automatic push updates, structured input schemas beyond bounded text, and generalized enrollment UI remain future work.
+The app does not require a backend, a global registry, or an always-running extension worker. Discovery is pulled when the launcher opens/refreshes and before execution. Automatic push updates, structured input schemas beyond bounded text, duplicate invocation handling, and navigation acknowledgement remain future work.
+
+The committed [Chromium PWA pairing test](https://github.com/web-relay/web-relay/blob/main/tests/pwa-pairing.mjs) covers actual launcher discovery/execution, stale context, approval rejection, shared-origin routing, provider addressing, errors, disable/remove and teardown/remount. Run `pnpm test:e2e` after building. `pnpm test:hub` additionally checks the deployed Personal Hub and intercepts child navigation to avoid account writes. The disposable test launcher pregrants only the fixture host because headless CI cannot approve Chromium's native host permission prompt; production settings request permission interactively.

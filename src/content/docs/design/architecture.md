@@ -40,7 +40,7 @@ Use pnpm workspace dependencies to share TypeScript contracts. Build the two ext
 
 Real provider extensions and PWAs should live in their own folders or repositories. They communicate through the shared protocol and SDK; discovery does not depend on sharing a source directory. The launcher can be built and installed independently from the example apps.
 
-The launcher bundles GitHub/LLM defaults and two demo PWA origins. Additional extension IDs are explicitly approved in its settings and saved locally; adding them requires no launcher rebuild. New PWA origins still require `apps/launcher-extension/src/providers.ts` and matching manifest access. The standalone SDK is published on npm and can also be packed for development. See the [SDK integration guides](/guides/sdk/).
+The launcher bundles GitHub/LLM defaults and two demo PWA origins. Additional extension IDs are explicitly approved in its settings and saved locally; adding them requires no launcher rebuild. Development launcher 0.0.3 adds PWA pairing in settings with optional host approval and origin/path scopes; built-in origins retain their manifest configuration. The standalone SDK is published on npm and can also be packed for development. See the [SDK integration guides](/guides/sdk/).
 
 The separate `llm-provider-extension` folder demonstrates an integration outside the monorepo. It uses `@web-relay/sdk/extension` and is built and installed independently. It consumes the standalone SDK tarball built by the sibling runtime checkout; npm distribution remains deferred.
 

@@ -23,7 +23,7 @@ GitHub tests use intercepted URL fixtures. They exercise real cross-extension me
 
 ## Remaining before a broader MVP release
 
-PWA enrollment UI, general input schemas, production permission onboarding, broader lifecycle testing, and search ranking still need work. Search currently matches substrings rather than implementing fuzzy scoring. Discovery refreshes on open, refresh, and after invocation; provider updates do not continuously push into an open launcher.
+Development launcher 0.0.3 adds PWA enrollment UI, optional host permission onboarding, shared-origin path routing and Chromium lifecycle checks. General input schemas, invocation deduplication, navigation acknowledgement and search ranking still need work. Search currently matches substrings rather than implementing fuzzy scoring. Discovery refreshes on open, refresh, and after invocation; provider updates do not continuously push into an open launcher.
 
 ## Phase 1 — prove the local loop
 

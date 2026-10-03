@@ -162,3 +162,16 @@ Add an optional `name` and context-free `describe` request to the extension SDK'
 **Implementation:** [Pairing manager](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/pairing.ts), [settings UI](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/options.ts), and [Chromium pairing checks](https://github.com/web-relay/web-relay/blob/main/tests/pairing.mjs). See [pairing instructions](/guides/extensions/#pair-it-with-the-launcher).
 
 **Validation:** Real Chromium discovery/invocation after user approval, empty-provider identity, older discovery fallback, disabled/removed stale commands, default context privacy and approved sharing, duplicate/reserved/changed identities, settings-only management, synthetic-click rejection, and persistence across browser/worker restart. Isolated package tests verify the new SDK response and declarations.
+
+
+## 014 — Explicit PWA settings pairing and shared-origin routing
+
+**Status:** Implemented development launcher 0.0.3 and SDK source changes · **Date:** 4 October 2026
+
+Extend settings enrollment to web apps. Ask for optional HTTP(S) host access only on a trusted user settings action, probe one matching open app tab, review its reported identity and origin/path, then revalidate a short-lived document-bound proposal on explicit approval. Save pairings locally and support disable/removal. Host permission remains independently revocable in browser settings; permission alone never enrolls an app. Keep bundled defaults, exact-origin checks, top-frame messaging and stale-context rejection.
+
+Root scopes match only the home page; other path scopes include subpages at segment boundaries. This lets the Personal Hub and independent child apps share a GitHub Pages origin. Address bridge requests by providerId; development SDK registries ignore other identities. Published SDK 0.1.3 supports nonempty discovery pairing for apps on separate paths. Same-origin paths are routing scopes, not security isolation.
+
+Validate provider/capability metadata and the 50-command/300-character description limits during registration. Browser-owned tab actions retain their larger local registry. Document that disposal does not cancel pending work, request IDs are not deduplicated, and navigation timers do not acknowledge result delivery. SDK changes are development source, not an npm publication.
+
+**Implementation:** [PWA pairing and transport](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/pwa-pairing.ts), [PWA SDK](https://github.com/web-relay/web-relay/blob/main/packages/sdk/src/index.ts), and [committed Chromium pairing/hub test](https://github.com/web-relay/web-relay/blob/main/tests/pwa-pairing.mjs). See the [PWA setup guide](/guides/pwa/). Headless tests pregrant only the fixture host in a disposable launcher copy; Chromium's native interactive permission prompt requires manual verification.

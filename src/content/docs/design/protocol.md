@@ -3,7 +3,7 @@ title: Discovery and invocation contract
 description: The implemented version 1 development protocol and its trust and lifecycle boundaries.
 ---
 
-The showcase uses a small, JSON-only protocol shared by the launcher, PWA bridge, GitHub provider, and separate LLM provider. It supports **discovery**, **execution without arguments**, and **bounded text input** for question actions. Extension enrollment is available through launcher settings; broader schemas and PWA enrollment UI remain deferred. See the [SDK integration guides](/guides/sdk/).
+The showcase uses a small, JSON-only protocol shared by the launcher, PWA bridge, GitHub provider, and separate LLM provider. It supports **discovery**, **execution without arguments**, and **bounded text input** for question actions. Extension enrollment and development launcher 0.0.3 PWA enrollment are available through settings; broader schemas remain deferred. See the [SDK integration guides](/guides/sdk/).
 
 ## Provider-owned registries
 
@@ -32,7 +32,7 @@ Tab context is optional. The GitHub provider receives it only for GitHub.com tab
 
 ## Extension identity for pairing
 
-SDK 0.1.3 accepts a context-free `"type": "describe"` request and replies with `{ "providerId": "workspaces", "name": "Saved workspaces", "protocolVersion": 1 }` in the ordinary correlated success envelope. It validates the paired launcher sender first, then answers without registration or actions. Names are provider-reported rather than verified browser/store names. PWA SDKs reject this extension-only request.
+SDK 0.1.3 accepts a context-free `"type": "describe"` request and replies with `{ "providerId": "workspaces", "name": "Saved workspaces", "protocolVersion": 1 }` in the ordinary correlated success envelope. It validates the paired launcher sender first, then answers without registration or actions. Names are provider-reported rather than verified browser/store names. Published PWA SDK 0.1.3 rejects describe; the development PWA SDK responds with the same identity, and supports optional providerId addressing. Older PWAs pair through validated nonempty discovery.
 
 The settings page checks connectivity, reviews identity, and explicitly approves a short-lived proposal bound to that settings document. Approval rechecks identity before storing the pairing. Older extension providers may ignore `describe`; the launcher can fall back to validated nonempty discovery. It cannot infer an older provider's identity from an empty command list. Disabled/removed providers cannot route future invocations. Current-tab context is only sent to additional providers when the user approves URL sharing.
 
@@ -90,4 +90,4 @@ Errors include unavailable commands, stale context, invalid responses, disconnec
 
 The UI may close after dispatch; actions do not need to return a result. Returned errors are displayed while it remains open. Errors refreshing commands after delivery are kept separate from execution errors.
 
-This version does not provide general input schemas, cancellation, retries, idempotency guarantees, automatic enrollment or PWA enrollment UI, or workflow chaining. Development allowlists and fixed manifest keys are explicit prototype decisions, not a production onboarding system.
+This version does not provide general input schemas, cancellation, retries, idempotency guarantees, automatic enrollment, or workflow chaining. Development allowlists and fixed manifest keys are explicit prototype decisions, not a production onboarding system.

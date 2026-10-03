@@ -106,7 +106,7 @@ The provider must still allow the launcher's actual ID in both its manifest and 
 
 SDK **0.1.3** adds optional `name` and a sender-validated `describe` response, so an extension can pair even when it has no commands. This response does not run `register` or actions. Older SDK providers can pair through discovery when at least one command is available; the provider ID becomes the review label. Protocol version 1 remains in use.
 
-Bundled GitHub/LLM defaults remain in `apps/launcher-extension/src/providers.ts`. An optional `contextOrigins` filters context for those defaults; `enabledSetting` retains the GitHub preference. [PWA origins](/guides/pwa/) still require source and manifest configuration. Installing the SDK alone never approves pairing.
+Bundled GitHub/LLM defaults remain in `apps/launcher-extension/src/providers.ts`. An optional `contextOrigins` filters context for those defaults; `enabledSetting` retains the GitHub preference. Development launcher 0.0.3 adds [PWA settings pairing](/guides/pwa/#pair-in-launcher-settings) with optional host access and origin/path scopes. Installing the SDK alone never approves pairing.
 
 ## Verify
 
