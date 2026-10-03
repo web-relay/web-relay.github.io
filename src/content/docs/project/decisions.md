@@ -90,3 +90,13 @@ Add bounded text input for “Prepare question for a new ChatGPT chat.” Copy t
 This first version does not depend on an undocumented web prompt-submission URL, request AI-app host permissions, or automate account UI. Automatic submission remains a possible app-specific integration rather than claimed current behavior.
 
 **Validation:** Real clipboard and tab navigation against ChatGPT/Gemini destination fixtures. No prompts are submitted to an account.
+
+## 008 — Reference workspace and independent real integrations
+
+**Status:** Accepted direction · **Date:** 3 October 2026
+
+Use the main monorepo for the reference implementation, small examples, and integration tests. Keep real provider extensions and PWAs in separate folders or repositories. Their integration boundary is the versioned protocol and SDK, rather than a shared filesystem location. The launcher is an independently installable extension even while its source is maintained in the reference workspace.
+
+The notes PWA and GitHub navigation provider remain fixtures for validating discovery, invocation, and browser behavior. This refines decision 001 without moving the existing examples.
+
+**Remaining work:** Make SDK packages usable outside the pnpm workspace and provide explicit configuration for additional PWA origins and extension provider IDs. The current development pairing is still fixed; arbitrary external providers are not automatically discovered.
