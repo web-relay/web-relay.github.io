@@ -32,7 +32,7 @@ apps/webapp-extension/dist
 
 The second extension is named **Web Relay GitHub Provider**. Both manifests include public development keys so their IDs remain stable across machines. This allows explicit pairing without manual ID entry.
 
-Pin the launcher in the toolbar. Open it with the toolbar button or `Alt + Shift + Space`; check `chrome://extensions/shortcuts` if another application intercepts the shortcut.
+Pin the launcher in the toolbar. Its toolbar button injects a command dialog into the active HTTP(S) page. Open it with the button or `Alt + Shift + Space`; check `chrome://extensions/shortcuts` if another application intercepts the shortcut.
 
 ## Try the PWA SDK
 
@@ -52,6 +52,22 @@ Visit [the runtime repository](https://github.com/web-relay/web-relay) and open 
 - Open repository pull requests
 
 The provider also exposes **Open Web Relay repository** from any tab. These actions navigate GitHub URLs; they do not write account data, call an authenticated API, or depend on DOM selectors.
+
+## Send a question or link to an AI web app
+
+**Prepare question for a new ChatGPT chat** opens a small input form. Enter a question, then choose **Copy question & open ChatGPT**. The launcher copies the question and opens `https://chatgpt.com/`. Paste and send it in ChatGPT.
+
+**Share current link with Gemini** copies the active page URL and opens `https://gemini.google.com/app`. Paste the link there and add your question.
+
+These are copy-and-open handoffs. They do not submit prompts automatically or claim a supported prompt-submission URL API. No ChatGPT or Gemini host permissions, API keys, or DOM automation are used. See the official [ChatGPT web guide](https://learn.chatgpt.com/docs/web) and [Gemini guide](https://support.google.com/gemini/answer/13275745?hl=en) for sending messages in those apps.
+
+## Dismissal and action delivery
+
+The injected dialog closes with Escape, a backdrop click, window focus loss, tab switching, or navigation. Closing it does not cancel an already-sent action. Returned errors appear while the UI is present; actions may return no result.
+
+Missing execution replies are reported as unconfirmed handoffs rather than proof of completion. A refresh failure after successful delivery does not replace the delivery message with an action error.
+
+The Manifest V3 service worker remains a small broker for toolbar clicks, browser APIs, and cross-extension messaging. It does not keep a live capability registry. The current launcher tab ID is stored in session storage only to dismiss the UI on tab switches.
 
 ## Try browser actions
 
@@ -76,10 +92,10 @@ The test starts the local server if needed and loads both real extensions in per
 
 Tests exercise SDK and local palette execution, content-script discovery, cross-extension messaging, contextual availability, stale requests, provider disabling, clipboard writes, browser navigation, persistence, and offline loading.
 
-GitHub tests intercept navigation with URL fixtures, so they do not interact with an account. Headless tests open the real popup document in a tab; they do not inspect the browser-toolbar popup through Playwright. Screenshots are saved in `test-results/`.
+GitHub tests intercept navigation with URL fixtures, so they do not interact with an account. The injected-UI suite triggers the actual toolbar action using Chromium’s extension debugging API and tests the dialog on the host page. It covers `activeTab` injection on GitHub, question input, clipboard handoffs, and dismissal. The earlier diagnostic-document suite still tests core routing and browser actions. ChatGPT and Gemini destination pages are also fixtures; no prompts are submitted. Screenshots are saved in `test-results/`.
 
 ## Development limits
 
-The SDK packages are private workspace packages. The bridge trusts only the demo origins and the known `demo-notes` provider. Generic provider registration, input arguments, continuously pushed discovery, fuzzy search ranking, production permission onboarding, and workflow composition remain future work.
+The SDK packages are private workspace packages. Question actions support bounded text input; ordinary actions need no arguments. Injection is blocked on browser internal pages such as `chrome://` and other protected pages. The extension shows a badge if it cannot inject; try on an ordinary website. The bridge trusts only the demo origins and the known `demo-notes` provider. Generic provider registration, general input schemas, continuously pushed discovery, fuzzy search ranking, production permission onboarding, and workflow composition remain future work.
 
 Read the [implemented contract](/design/protocol/) and [trust controls](/design/security/) before extending the integration.

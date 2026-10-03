@@ -13,7 +13,7 @@ The development showcase implements the controls below, but has not undergone a 
 
 - The PWA bridge checks same-window source and exact origin, and only runs in the top frame at `http://localhost:4173` or `http://127.0.0.1:4173`.
 - The launcher targets one fixed development GitHub provider ID. That provider allows only the paired launcher ID through `externally_connectable` and a sender check.
-- Only the launcher's own popup document may invoke its privileged internal API.
+- The injected UI’s privileged messages require this extension’s own top-frame sender, bound to its tab and URL. The extension’s own diagnostic document is also permitted. Page-bridge messages cannot invoke the panel API, and synthetic page clicks do not execute UI actions.
 - Wire requests and responses validate protocol version, request correlation, JSON shape, capability IDs, and provider identity.
 - Active tab ID and URL are rechecked before invocation; app availability is rechecked in the owning registry.
 - Disabling the GitHub provider prevents both listing and execution. Preferences survive service-worker restarts through extension storage.
@@ -21,7 +21,7 @@ The development showcase implements the controls below, but has not undergone a 
 
 Manifest public keys stabilize unpacked extension IDs. They are development pairing identities, not protection against a person who controls and modifies the unpacked source. Code running in the trusted PWA origin is part of the same trust boundary.
 
-The launcher requests `tabs`, `storage`, `clipboardWrite`, and local-host access. The GitHub provider requests access to `https://github.com/*`. Local host match patterns cover more ports than the script allows; the bridge checks the exact origin before installing its listener. Incremental production permission onboarding is not implemented yet.
+The launcher requests `activeTab` and `scripting` to inject the UI after a user action, plus `tabs`, `storage`, `clipboardWrite`, and local-host access. It does not request automatic access to all websites. ChatGPT and Gemini actions copy text and open a destination; they request no host access to those apps. The GitHub provider requests access to `https://github.com/*`. Local host match patterns cover more ports than the script allows; the bridge checks the exact origin before installing its listener. Incremental production permission onboarding is not implemented yet.
 
 ## Principles from the product brief
 

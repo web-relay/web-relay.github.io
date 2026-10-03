@@ -9,17 +9,19 @@ The project is currently a **working local showcase**. A notes PWA, launcher ext
 
 - Provider-owned registry with registration, unregister, and fresh availability checks.
 - Notes PWA using the SDK and a local palette, with persisted notes and an offline shell.
-- Launcher search and keyboard navigation, active-tab discovery, source labels, and errors.
+- Injected launcher dialog, search and keyboard navigation, active-tab discovery, source labels, and errors.
 - Independent GitHub.com extension for repository navigation.
 - Browser URL copy, new tab, downloads, and tab duplication.
+- Copy-and-open question handoff to ChatGPT and current-link handoff to Gemini.
+- Optional action results, visible errors, focus-loss dismissal, and bounded text input.
 - Versioned requests, validated responses, timeouts, and stale-context rejection.
 - Unit tests and full Chromium integration checks with both extensions installed.
 
-GitHub tests use intercepted URL fixtures. They exercise real cross-extension messaging and tab navigation without performing GitHub account actions. Headless tests open the real popup document in a tab; the toolbar popup itself is not inspected through Playwright.
+GitHub tests use intercepted URL fixtures. They exercise real cross-extension messaging and tab navigation without performing GitHub account actions. The injected-UI suite triggers the actual toolbar action and tests the launcher on the host page. The diagnostic-document suite still covers core routing. AI destinations use fixtures; no prompts are submitted.
 
 ## Remaining before a broader MVP release
 
-Generic provider enrollment and approval, input schemas, production permission onboarding, broader lifecycle testing, and search ranking still need work. Search currently matches substrings rather than implementing fuzzy scoring. Discovery refreshes on open, refresh, and after invocation; provider updates do not continuously push into an open launcher.
+Generic provider enrollment and approval, general input schemas, production permission onboarding, broader lifecycle testing, and search ranking still need work. Search currently matches substrings rather than implementing fuzzy scoring. Discovery refreshes on open, refresh, and after invocation; provider updates do not continuously push into an open launcher.
 
 ## Phase 1 — prove the local loop
 

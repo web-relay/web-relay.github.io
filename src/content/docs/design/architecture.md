@@ -38,7 +38,7 @@ packages/
 
 Use pnpm workspace dependencies to share TypeScript contracts. Build the two extensions as separate unpacked installations. Their source lives together; their browser identities and permission boundaries remain separate.
 
-The notes PWA exposes create and pin actions through the SDK and its local palette. The launcher discovers the active demo app, the paired GitHub extension, and browser actions. GitHub capabilities navigate repository pages without DOM selectors or account writes. See the [showcase guide](/project/showcase/) for setup.
+The notes PWA exposes create and pin actions through the SDK and its local palette. The launcher is now an injected dialog inside the active page. It discovers the active demo app, the paired GitHub extension, and browser/AI handoff actions. GitHub capabilities navigate repository pages without DOM selectors or account writes. See the [showcase guide](/project/showcase/) for setup.
 
 The documentation remains in [web-relay.github.io](https://github.com/web-relay/web-relay.github.io), publishing at the organization’s root URL. Update it as implementation reveals details and decisions are accepted.
 
@@ -87,3 +87,12 @@ The implemented prototype uses pull discovery and versioned, correlated `discove
 The MVP registry, bridge, providers, and command execution remain local. Future services could improve synchronization, adapter distribution, signatures, metadata, or health monitoring, but must not become required for the launcher to function.
 
 See [capabilities and context](/design/capabilities/) and [trust boundaries](/design/security/).
+
+
+## Local unpacked-extension scope
+
+The initial deliverable is local dogfooding with unpacked extensions. The UI delivers actions and can close after navigation or focus changes. Results are optional; returned errors are shown while the launcher remains present.
+
+The service worker is an event-driven broker for toolbar injection, browser APIs, and cross-extension requests. Registries remain provider-owned. Only the launcher tab ID is saved in session storage for dismissal; there is no worker-held capability registry to keep alive.
+
+The injected UI uses `activeTab` plus `scripting`, avoiding automatic access to every website. Browser internal and protected pages may block injection. Store packaging and generalized production enrollment are deferred beyond this local slice.

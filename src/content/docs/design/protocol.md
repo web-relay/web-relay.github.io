@@ -3,11 +3,11 @@ title: Discovery and invocation contract
 description: The implemented version 1 development protocol and its trust and lifecycle boundaries.
 ---
 
-The showcase uses a small, JSON-only protocol shared by the launcher, PWA bridge, and GitHub provider. It supports **discovery** and **execution of actions without input arguments**. Broader schemas and generic provider enrollment remain deferred.
+The showcase uses a small, JSON-only protocol shared by the launcher, PWA bridge, and GitHub provider. It supports **discovery**, **execution without arguments**, and **bounded text input** for question actions. Broader schemas and generic provider enrollment remain deferred.
 
 ## Provider-owned registries
 
-Each provider retains its functions and live context. Discovery returns descriptors containing `id`, `title`, optional `description`, `providerId`, and `providerKind`. The launcher combines these descriptors and routes an invocation to its owner.
+Each provider retains its functions and live context. Discovery returns descriptors containing `id`, `title`, optional `description` and `input: "text"`, `providerId`, and `providerKind`. The launcher combines these descriptors and routes an invocation to its owner.
 
 The current providers are `demo-notes` (`pwa`), `github` (`extension`), and `browser` (`browser`). Capability IDs are unique within a provider; routing uses provider identity and capability ID together.
 
@@ -26,7 +26,7 @@ The current providers are `demo-notes` (`pwa`), `github` (`extension`), and `bro
 }
 ```
 
-An execution request uses `"type": "execute"` and adds `"capabilityId": "github.repo-issues"`. The caller generates a fresh request ID. Unsupported versions and malformed messages are ignored by provider listeners and rejected by the caller if they do not produce a valid correlated response.
+An execution request uses `"type": "execute"` and adds `"capabilityId": "github.repo-issues"`. A text-input execution request also includes `"input": "your question"`, limited to 2000 characters. The registry requires nonblank text for a text-input capability and rejects arguments for no-input capabilities. The caller generates a fresh request ID. Unsupported versions and malformed messages are ignored by provider listeners and rejected by the caller if they do not produce a valid correlated response.
 
 Tab context is optional. The GitHub provider receives it only for GitHub.com tabs; its global project-navigation action needs no repository context. PWA application context remains local and is supplied by the SDK registry’s context callback.
 
@@ -45,6 +45,8 @@ Tab context is optional. The GitHub provider receives it only for GitHub.com tab
 
 Discovery uses the same success envelope with a descriptor array as `data`. Failure responses use `"ok": false` and an `error` object with `code` and `message`.
 
+An action function may return nothing; the registry normalizes this to a successful `null` result. If an execution transport resolves without a reply, the launcher reports “Action sent; no result returned.” This does not confirm completion. Discovery still requires a valid metadata response.
+
 The caller validates version, response shape, matching request ID, JSON data, metadata, and provider identity. Duplicate descriptor IDs are rejected. Functions are never sent across a bridge.
 
 ## Transports
@@ -53,7 +55,9 @@ The caller validates version, response shape, matching request ID, JSON data, me
 
 **GitHub extension:** the launcher uses `chrome.runtime.sendMessage` with the known provider extension ID. The provider accepts requests only from the paired development launcher ID.
 
-**Browser:** built-in commands use the local registry. Clipboard execution returns the URL to the popup, which writes it using its clipboard permission.
+**Browser:** built-in commands use the local registry. Clipboard results are copied by the foreground UI. AI handoffs copy the question or URL first, then ask the broker to open an allowlisted ChatGPT or Gemini destination. No prompt is automatically submitted.
+
+**Injected UI:** a toolbar action or shortcut grants `activeTab` access. The broker injects an isolated content script that mounts the launcher in a Shadow DOM. Internal panel messages require this extension’s own top-frame sender and bind execution to its tab and URL. Real user activation is required for UI action clicks and keyboard execution; page-generated clicks are ignored.
 
 ## Discovery lifecycle
 
@@ -78,4 +82,6 @@ Errors include unavailable commands, stale context, invalid responses, disconnec
 
 **A timeout does not cancel an action.** The UI does not automatically retry an invocation. Check the application before retrying, because execution may already have completed.
 
-This version does not provide input schemas, cancellation, retries, idempotency guarantees, dynamic extension enrollment, or workflow chaining. Development allowlists and fixed manifest keys are explicit prototype decisions, not a production onboarding system.
+The UI may close after dispatch; actions do not need to return a result. Returned errors are displayed while it remains open. Errors refreshing commands after delivery are kept separate from execution errors.
+
+This version does not provide general input schemas, cancellation, retries, idempotency guarantees, dynamic extension enrollment, or workflow chaining. Development allowlists and fixed manifest keys are explicit prototype decisions, not a production onboarding system.

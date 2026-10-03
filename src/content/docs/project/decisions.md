@@ -67,3 +67,26 @@ This reduces enrollment complexity in the owned local environment while preservi
 Timeouts produce errors without automatic retries or cancellation. Search uses substrings, and commands take no input arguments in this first contract. Read the [protocol](/design/protocol/) for exact behavior.
 
 **Validation:** Registry and protocol unit tests plus full Chromium integration checks with both real extensions. GitHub navigation uses intercepted URL fixtures. Headless tests open the real popup document as a tab, so toolbar-popup presentation still needs a manual smoke check. The original proposed `Alt + Space` shortcut becomes `Alt + Shift + Space` in the development manifest.
+
+
+## 006 — Injected launcher and optional-result delivery
+
+**Status:** Implemented local prototype · **Date:** 3 October 2026
+
+For local unpacked extensions, deliver actions from a dialog injected into the active page. Use a toolbar click or shortcut with `activeTab` and `scripting`; do not request automatic access to every site. Dismiss on Escape, backdrop click, focus loss, tab switching, or navigation.
+
+The worker remains a small event-driven broker for browser APIs and cross-extension messages. It holds no live capability registry. Closing the UI does not cancel an invocation. Results are optional, returned errors are shown while the UI is present, and post-action refresh failures must not be described as execution failures.
+
+The core registry normalizes void results to null. Missing execution replies are unconfirmed handoffs, not proof of success. Generalized production enrollment and store distribution are deferred for this local slice.
+
+**Validation:** Actual toolbar-triggered injection in Chromium, including GitHub through `activeTab`; SDK actions, contextual availability, synthetic-click rejection, Escape, backdrop dismissal, and tab-focus dismissal.
+
+## 007 — AI web-app handoffs without automatic submission
+
+**Status:** Implemented first handoff · **Date:** 3 October 2026
+
+Add bounded text input for “Prepare question for a new ChatGPT chat.” Copy the question, open ChatGPT, and let the user paste and send it. “Share current link with Gemini” copies the source URL and opens Gemini for pasting.
+
+This first version does not depend on an undocumented web prompt-submission URL, request AI-app host permissions, or automate account UI. Automatic submission remains a possible app-specific integration rather than claimed current behavior.
+
+**Validation:** Real clipboard and tab navigation against ChatGPT/Gemini destination fixtures. No prompts are submitted to an account.

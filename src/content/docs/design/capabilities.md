@@ -37,7 +37,7 @@ The code above is an integration excerpt: `selectedId` and `createNote` are owne
 
 The current registry supports `id`, `title`, optional `description`, `when(context)`, and `run(context)`. Duplicate IDs are rejected. Execution checks availability again against live app context. The wire descriptor adds `providerId` and `providerKind`; functions and live note data remain inside the PWA.
 
-The first bridge targets the known `demo-notes` provider at approved local origins. Arbitrary PWA provider enrollment is not implemented. Input arguments, JSON schemas, keyword metadata, icons, and subscriptions remain future API work.
+The first bridge targets the known `demo-notes` provider at approved local origins. Arbitrary PWA provider enrollment is not implemented. Text-input actions are now supported: add `input: "text"` and read the optional second argument in `run(context, input)`. The registry enforces a nonblank string of at most 2000 characters. Ordinary action functions may return nothing. General JSON schemas, keyword metadata, icons, and subscriptions remain future API work.
 
 ## Proposed broader model
 
