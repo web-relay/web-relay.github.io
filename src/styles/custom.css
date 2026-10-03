@@ -9,7 +9,7 @@
   --sl-color-accent: #247549;
   --sl-color-accent-high: #18442c;
 }
-.hero { padding-block: clamp(2rem, 5vw, 4rem); }
+.hero { padding-block: clamp(2rem, 5vw, 4rem); grid-template-columns: 100%; }
 .hero h1 { max-width: 850px; font-size: clamp(2.7rem, 6vw, 5.2rem); letter-spacing: -.055em; line-height: 1.06; }
 .hero .tagline { max-width: 42rem; font-size: 1.2rem; line-height: 1.7; }
 .site-title { letter-spacing: -.04em; font-weight: 750; }
