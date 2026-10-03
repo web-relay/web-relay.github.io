@@ -3,13 +3,13 @@ title: Discovery and invocation contract
 description: The implemented version 1 development protocol and its trust and lifecycle boundaries.
 ---
 
-The showcase uses a small, JSON-only protocol shared by the launcher, PWA bridge, GitHub provider, and separate LLM provider. It supports **discovery**, **execution without arguments**, and **bounded text input** for question actions. Broader schemas and generic provider enrollment remain deferred.
+The showcase uses a small, JSON-only protocol shared by the launcher, PWA bridge, GitHub provider, and separate LLM provider. It supports **discovery**, **execution without arguments**, and **bounded text input** for question actions. Broader schemas and a user-facing enrollment UI remain deferred. Explicit local pairing is configurable in the launcher source; see the [SDK integration guides](/guides/sdk/).
 
 ## Provider-owned registries
 
 Each provider retains its functions and live context. Discovery returns descriptors containing `id`, `title`, optional `description` and `input: "text"`, `providerId`, and `providerKind`. The launcher combines these descriptors and routes an invocation to its owner.
 
-The current providers are `demo-notes` (`pwa`), `github` (`extension`), and `browser` (`browser`). Capability IDs are unique within a provider; routing uses provider identity and capability ID together.
+Default providers are `demo-notes` (`pwa`), `github` and `llm` (`extension`), and `browser` and `tabs` (`browser`). Additional paired sources are configured in `apps/launcher-extension/src/providers.ts`. Capability IDs are unique within a provider; routing uses provider identity and capability ID together.
 
 ## Requests
 
@@ -84,4 +84,4 @@ Errors include unavailable commands, stale context, invalid responses, disconnec
 
 The UI may close after dispatch; actions do not need to return a result. Returned errors are displayed while it remains open. Errors refreshing commands after delivery are kept separate from execution errors.
 
-This version does not provide general input schemas, cancellation, retries, idempotency guarantees, dynamic extension enrollment, or workflow chaining. Development allowlists and fixed manifest keys are explicit prototype decisions, not a production onboarding system.
+This version does not provide general input schemas, cancellation, retries, idempotency guarantees, automatic or user-facing extension enrollment, or workflow chaining. Development allowlists and fixed manifest keys are explicit prototype decisions, not a production onboarding system.

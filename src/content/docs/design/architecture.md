@@ -40,9 +40,9 @@ Use pnpm workspace dependencies to share TypeScript contracts. Build the two ext
 
 Real provider extensions and PWAs should live in their own folders or repositories. They communicate through the shared protocol and SDK; discovery does not depend on sharing a source directory. The launcher can be built and installed independently from the example apps.
 
-The current prototype still pairs known GitHub and LLM provider IDs and two demo PWA origins. Moving an app's source does not change that pairing, but adding a new provider or serving a PWA at another origin requires explicit launcher configuration changes today. Configurable provider enrollment and separately consumable SDK packages are the next integration work, not implemented features.
+The current prototype still pairs known GitHub and LLM provider IDs and two demo PWA origins. Moving an app's source does not change that pairing, but adding a new provider or serving a PWA at another origin requires explicit launcher configuration changes today. Explicit provider pairing is now centralized in `apps/launcher-extension/src/providers.ts`; a standalone SDK tarball with JavaScript and declarations is available. npm publication and a user-facing enrollment UI remain deferred. See the [SDK integration guides](/guides/sdk/).
 
-The separate `llm-provider-extension` folder demonstrates an integration outside the monorepo. It uses `@web-relay/sdk/extension` and is built and installed independently. Its development build resolves the shared SDK from the sibling checkout; npm distribution remains deferred.
+The separate `llm-provider-extension` folder demonstrates an integration outside the monorepo. It uses `@web-relay/sdk/extension` and is built and installed independently. It consumes the standalone SDK tarball built by the sibling runtime checkout; npm distribution remains deferred.
 
 The notes PWA exposes create and pin actions through the SDK and its local palette. The launcher is now an injected dialog inside the active page. It discovers the active demo app, the paired GitHub extension, the paired LLM provider, browser actions, and tabs in the current window. GitHub capabilities navigate repository pages without DOM selectors or account writes. See the [showcase guide](/project/showcase/) for setup.
 

@@ -96,13 +96,13 @@ GitHub tests intercept navigation with URL fixtures, so they do not interact wit
 
 ## Development limits
 
-The SDK packages are private workspace packages. Question actions support bounded text input; ordinary actions need no arguments. Injection is blocked on browser internal pages such as `chrome://` and other protected pages. The extension shows a badge if it cannot inject; try on an ordinary website. The bridge trusts only the demo origins and the known `demo-notes` provider. Generic provider registration, general input schemas, continuously pushed discovery, fuzzy search ranking, production permission onboarding, and workflow composition remain future work.
+SDK 0.1.0 builds as a standalone tarball with bundled JavaScript and TypeScript declarations, but is not published on npm. See [installation and integration](/guides/sdk/). Question actions support bounded text input; ordinary actions need no arguments. Injection is blocked on browser internal pages such as `chrome://` and other protected pages. The extension shows a badge if it cannot inject; try on an ordinary website. The bridge trusts only the demo origins and the known `demo-notes` provider. Automatic provider enrollment, general input schemas, continuously pushed discovery, fuzzy search ranking, production permission onboarding, and workflow composition remain future work.
 
 Read the [implemented contract](/design/protocol/) and [trust controls](/design/security/) before extending the integration.
 
 ## Separate LLM provider
 
-A separate `llm-provider-extension` folder beside the runtime checkout contains the LLM integration. In that folder, run `pnpm install`, `pnpm check`, and `pnpm build`, then load its `dist` directory as an unpacked extension. Rebuild and reload the launcher to discover the new paired provider.
+A separate `llm-provider-extension` folder beside the runtime checkout contains the LLM integration. First run `pnpm pack:sdk` in the runtime checkout. In the provider folder, run `pnpm install`, `pnpm check`, and `pnpm build`, then load its `dist` directory as an unpacked extension. Rebuild and reload the launcher to discover the new paired provider.
 
 On an HTTP(S) page, choose **New ChatGPT chat with current page** or **New Gemini chat with current page**. Both actions use “Please help me understand this page. Use this link as context:” followed by the current URL. ChatGPT copies this prompt and opens a new tab; paste and send it yourself. Gemini opens a fresh chat and automatically submits the prompt once. It does not read the source page's contents. The model may be unable to access private or local links.
 

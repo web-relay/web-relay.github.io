@@ -126,3 +126,15 @@ Follow the system light/dark theme in both the injected dialog and diagnostic do
 Search matches every word across title, description, and provider ID, allowing `tabs github` and `llm gemini`. A Raycast-style provider scope entered by typing `llm` and pressing Tab remains a proposal. The proposed scope would preserve the original page context, show only that provider's commands, and return to global search with Escape or Backspace. It needs a separate UX decision before implementation.
 
 **Validation:** Registry/protocol checks and full Chromium tests for actual toolbar injection, dark/light styles, AI command removal, exclusion of other-window tabs, keyboard switching, ChatGPT clipboard handoff without submission, and retained Gemini delivery/fallback. Destination sites remain fixtures, not real-account automation tests.
+
+## 011 — Standalone SDK distribution and explicit integration guides
+
+**Status:** Implemented development package · **Date:** 3 October 2026
+
+Build `@web-relay/sdk` 0.1.0 as bundled ESM JavaScript and TypeScript declarations for PWA and extension entry points. Share runtime classes between entry points so typed errors retain their identity. Pack a tarball with no runtime npm dependencies, MIT license, API README, and portable coding-agent skill. Verify it in an isolated consumer rather than relying only on workspace compilation. npm publication has not occurred and remains a separate release step.
+
+Move local extension IDs, provider IDs, optional context-origin filters, and PWA exact origins into `apps/launcher-extension/src/providers.ts`. Discovery and routing use those entries; the existing trusted sources stay unchanged. New PWA hosts also require explicit manifest host permissions/content-script matches. SDK installation does not automatically enroll a provider. This replaces the fixed per-provider routing implementation while preserving explicit local trust.
+
+Provide current extension/PWA integration guides and a reusable `web-relay-integration` coding-agent skill. Real integrations retain their own app state, functions, folders, permissions, and builds. Use the LLM provider as a packed-SDK consumer. This supersedes the earlier source-alias requirement in decision 009 and the separately consumable package gap in decision 008.
+
+**Validation:** Standalone declaration build, isolated tarball install/typecheck, both SDK transport APIs and sender rejection, cross-entry error identity, registry/protocol tests, and full Chromium PWA/extension showcase and LLM provider checks. CI distributes package artifacts; it does not publish to npm.

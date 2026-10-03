@@ -18,6 +18,11 @@ export default defineConfig({
         { label: 'Why Web Relay?', slug: 'concepts/vision' },
         { label: 'Run the showcase', slug: 'project/showcase' },
       ] },
+      { label: 'SDK integration', items: [
+        { label: 'Install the SDK', slug: 'guides/sdk' },
+        { label: 'Extension provider', slug: 'guides/extensions' },
+        { label: 'PWA or web app', slug: 'guides/pwa' },
+      ] },
       { label: 'System design', items: [
         { label: 'Architecture', slug: 'design/architecture' },
         { label: 'Capabilities & context', slug: 'design/capabilities' },
