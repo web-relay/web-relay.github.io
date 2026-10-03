@@ -25,6 +25,7 @@ export default defineConfig({
       ] },
       { label: 'Build with us', items: [
         { label: 'MVP & roadmap', slug: 'project/roadmap' },
+        { label: 'Decisions & discoveries', slug: 'project/decisions' },
         { label: 'Contributing', slug: 'project/contributing' },
         { label: 'Original product brief', slug: 'project/product-brief' },
       ] },

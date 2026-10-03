@@ -3,7 +3,7 @@ title: MVP and roadmap
 description: The smallest useful proof, its acceptance criteria, and deliberately deferred work.
 ---
 
-The project is currently in **proposal and documentation**. The phases below describe a proposed sequence, not committed delivery dates.
+The project is currently in **development scaffold and protocol design**. A pnpm monorepo contains a demo PWA and two extension starters; connected discovery and command execution remain to be built. The phases below describe a proposed sequence, not committed delivery dates.
 
 ## Phase 1 — prove the local loop
 

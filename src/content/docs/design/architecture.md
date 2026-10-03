@@ -1,10 +1,10 @@
 ---
-title: Proposed architecture
+title: Architecture and workspace
 description: The capability registry, package boundaries, execution path, and local fallback.
 ---
 
 :::note[Design proposal]
-These package boundaries and transport details are starting points for discussion. They are not implemented or published packages.
+The pnpm monorepo and three-app development structure are accepted decisions. Transport details and SDK APIs remain proposals. The current implementation is a scaffold, with no connected discovery or execution yet.
 :::
 
 ## One internal capability model
@@ -21,7 +21,35 @@ Legacy adapter (later) ──┘         ├── Browser launcher
 
 Providers describe capabilities; the registry tracks their metadata and availability; an interface presents relevant commands. Execution is routed back to the owning provider.
 
-## Proposed packages
+## Accepted development structure
+
+The [runtime monorepo](https://github.com/web-relay/web-relay) contains:
+
+```text
+apps/
+  demo-pwa/             Local app and future in-app palette
+  launcher-extension/   Global launcher extension
+  webapp-extension/     Independent provider for another web app
+packages/
+  core/                 Shared capability metadata; future registry
+  protocol/             Future validated discovery and invocation contracts
+```
+
+Use pnpm workspace dependencies to share TypeScript contracts. Build the two extensions as separate unpacked installations. Their source lives together; their browser identities and permission boundaries remain separate.
+
+The demo PWA has an offline-capable shell. Both extensions have loadable starter manifests and popups. Provider discovery, runtime execution, trust approval, and command aggregation are not implemented yet.
+
+The documentation remains in [web-relay.github.io](https://github.com/web-relay/web-relay.github.io), publishing at the organization’s root URL. Update it as implementation reveals details and decisions are accepted.
+
+## Discovery and composition
+
+Start with applications and extensions we own and run locally. Explicit local provider configuration should make the first integration easier to inspect and test. Locality does not automatically identify or authorize a provider: origin checks, extension identities, message validation, and permissions are still required.
+
+Each app owns its live context and execution functions. The global launcher should hold discoverable metadata and route requests back to the owning provider; it should not receive executable function bodies.
+
+For the MVP, composition means collecting commands from several sources in one interface. Chaining commands into workflows remains out of scope.
+
+## Proposed SDK packages
 
 | Package | Responsibility |
 | --- | --- |

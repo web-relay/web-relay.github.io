@@ -8,7 +8,7 @@ Web Relay is the working project name for **Browser Capability Launcher**: a loc
 The idea is simple: applications expose useful actions through a common interface. A registry makes those capabilities discoverable, context-aware, and reusable across different interaction surfaces.
 
 :::caution[Project status]
-This is a design-stage open source project. These documents describe intended behavior. There is no published launcher or installable SDK yet; package names, APIs, shortcuts, and transports remain proposals.
+This is an early open source project with a development scaffold. A local demo PWA and two extension starters live in the runtime monorepo. Connected discovery and command execution are not implemented yet. There is no published launcher or installable SDK; API names, shortcuts, and transports remain proposals.
 :::
 
 ## The first experience

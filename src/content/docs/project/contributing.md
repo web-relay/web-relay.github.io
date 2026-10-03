@@ -21,6 +21,16 @@ Good examples include saving a podcast timestamp, opening the current customer i
 
 Feedback is especially useful on the capability schema, provider identity, bridge lifecycle, context updates, availability rules, and local palette fallback. Start with the [architecture](/design/architecture/) and [security requirements](/design/security/).
 
+## Develop the local workspace
+
+The [runtime monorepo](https://github.com/web-relay/web-relay) uses pnpm and TypeScript, with a demo PWA, launcher extension, and an independent web-app provider extension. Its README explains building and loading the development starters.
+
+The initial development target is Chromium. Headless Chromium is available on the development machine for UI checks; extension integration tests must also exercise full Chromium with both extensions loaded.
+
+## Keep decisions current
+
+Record accepted changes in the [decision log](/project/decisions/) as implementation discovers constraints. Include the reason, status, and what remains open. Update affected architecture, capability, security, or roadmap pages alongside the decision.
+
 ## Improve these docs
 
 The documentation lives in [web-relay/web-relay.github.io](https://github.com/web-relay/web-relay.github.io). Markdown and MDX pages are in `src/content/docs/`. Use the edit link on a page or submit a pull request.
