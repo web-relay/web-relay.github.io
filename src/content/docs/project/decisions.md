@@ -100,3 +100,17 @@ Use the main monorepo for the reference implementation, small examples, and inte
 The notes PWA and GitHub navigation provider remain fixtures for validating discovery, invocation, and browser behavior. This refines decision 001 without moving the existing examples.
 
 **Remaining work:** Make SDK packages usable outside the pnpm workspace and provide explicit configuration for additional PWA origins and extension provider IDs. The current development pairing is still fixed; arbitrary external providers are not automatically discovered.
+
+## 009 — Independent LLM provider using the extension SDK
+
+**Status:** Implemented local integration · **Date:** 3 October 2026
+
+Build the LLM provider in a separate `llm-provider-extension` folder beside the reference workspace. Add `createExtensionProvider` at `@web-relay/sdk/extension` to handle provider registration, launcher identity validation, fresh active-tab context, and versioned responses. The provider bundles this SDK from the sibling checkout while packages remain unpublished.
+
+Offer “New ChatGPT chat with current page” and “New Gemini chat with current page.” Each action opens a separate tab and submits one first message containing the source URL. Gemini explicitly selects New chat before filling the composer. Share the URL only; do not extract page contents or claim the model can access private or local links.
+
+The destination content script consumes a tab-bound, expiring session handoff. Ordinary chats are untouched, and reloads do not replay submissions. If login or changed controls prevent submission, show the prompt and a copy button on the destination page. A send-button click is delivery to the web interface, not confirmation that a response was generated. Never retry a potentially submitted message automatically.
+
+The launcher explicitly pairs this additional development provider ID. The provider requests access only to ChatGPT and Gemini, and accepts cross-extension requests only from the launcher. General provider enrollment remains deferred. This adds an app-specific integration alongside decision 007's existing clipboard handoffs.
+
+**Validation:** Full Chromium with both independently installed extensions and controlled destination fixtures; discovery, routing, fresh chat, URL preservation, one submission, reload replay prevention, ordinary-chat isolation, and login fallback. Live logged-in account behavior still needs manual verification because selectors can change.
