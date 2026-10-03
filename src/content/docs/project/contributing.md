@@ -23,7 +23,7 @@ Feedback is especially useful on the capability schema, provider identity, bridg
 
 ## Develop the local workspace
 
-The [runtime monorepo](https://github.com/web-relay/web-relay) uses pnpm and TypeScript, with a demo PWA, launcher extension, and an independent web-app provider extension. Its README explains building and loading the development starters.
+The [runtime monorepo](https://github.com/web-relay/web-relay) uses pnpm and TypeScript, with a notes PWA, launcher extension, and an independent GitHub.com provider extension. Follow the [showcase guide](/project/showcase/) to build, load, and test them.
 
 The initial development target is Chromium. Headless Chromium is available on the development machine for UI checks; extension integration tests must also exercise full Chromium with both extensions loaded.
 

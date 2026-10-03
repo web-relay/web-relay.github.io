@@ -9,7 +9,37 @@ A capability has a stable identifier, a human-readable title, optional input met
 The examples describe the intended developer experience. They are not a working SDK tutorial. Types and method names may change before implementation.
 :::
 
-## Proposed model
+## Working development SDK
+
+The notes showcase uses private workspace packages `@web-relay/core`, `@web-relay/protocol`, and `@web-relay/sdk`. No npm installation instructions apply yet.
+
+```ts
+import { createLauncher } from '@web-relay/sdk';
+
+const { registry, dispose } = createLauncher({
+  providerId: 'demo-notes',
+  context: () => ({ selectedId }),
+});
+
+const unregister = registry.register({
+  id: 'notes.create',
+  title: 'Create note',
+  run: () => createNote(), // Return a JSON-serializable result.
+});
+
+registry.list(); // Currently available metadata for the local palette.
+await registry.execute('notes.create');
+unregister();
+dispose(); // Detach the page bridge when the integration is destroyed.
+```
+
+The code above is an integration excerpt: `selectedId` and `createNote` are owned by the application. The complete running example is in the [monorepo](https://github.com/web-relay/web-relay/tree/main/apps/demo-pwa).
+
+The current registry supports `id`, `title`, optional `description`, `when(context)`, and `run(context)`. Duplicate IDs are rejected. Execution checks availability again against live app context. The wire descriptor adds `providerId` and `providerKind`; functions and live note data remain inside the PWA.
+
+The first bridge targets the known `demo-notes` provider at approved local origins. Arbitrary PWA provider enrollment is not implemented. Input arguments, JSON schemas, keyword metadata, icons, and subscriptions remain future API work.
+
+## Proposed broader model
 
 ```ts
 // Supporting types below are illustrative, not a finalized schema.

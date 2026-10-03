@@ -13,9 +13,9 @@ Start with PWAs and extensions we own and run locally. Keep the demo PWA, global
 
 This makes contracts, coordinated changes, and local testing easier. The browser still treats apps and extensions as separate origins and identities. Local ownership does not replace approval, permissions, validation, or lifecycle handling.
 
-**Implementation:** A buildable scaffold exists. The PWA has an offline shell; the extensions have starter manifests and popups. Discovery and invocation are the next working slice.
+**Implementation:** The scaffold has progressed into the working notes PWA and GitHub-provider showcase described in decisions 004 and 005 below.
 
-**Open:** Which real PWA and web app should be the first integration targets? How should extension IDs and allowed origins be configured during development?
+**Resolved:** Use a notes PWA and GitHub.com navigation provider first. Exact local origins and fixed development extension IDs make discovery explicit. Broader provider enrollment remains open.
 
 ## 002 — Command aggregation before workflows
 
@@ -42,3 +42,28 @@ Record accepted decisions here with their reasons and remaining questions. Conti
 **Status:** Working assumption · **Date:** 3 October 2026
 
 Use Chromium and Manifest V3 for the starters. Headless Chromium is installed on the development machine, which supports UI smoke checks. Extension discovery and messaging need integration tests in full Chromium with both extensions installed; a headless screenshot alone is not sufficient validation.
+
+
+## 004 — Notes PWA and GitHub.com provider first
+
+**Status:** Implemented development showcase · **Date:** 3 October 2026
+
+Use a simple notes PWA to show the same SDK registrations in local and browser palettes. Start with “Create note” and “Pin selected note”; pinning is context-sensitive and disappears after execution.
+
+Use an independent GitHub.com extension to prove provider discovery and cross-extension invocation. It offers project navigation globally and repository, issues, and pull-request navigation for the active repository. Derive context from URLs and keep actions read-only.
+
+Include browser URL copy, downloads, new tab, and duplication in the same launcher. This gives the first demonstration all three source kinds while keeping application behavior small.
+
+## 005 — Version 1 pull discovery and explicit development pairing
+
+**Status:** Implemented development contract · **Date:** 3 October 2026
+
+Use JSON-only, versioned `discover` and `execute` requests with correlated result envelopes. Providers own functions and live context. Discover on launcher open, refresh, and after execution; check active-tab context and provider availability again before invoking.
+
+PWA requests cross a top-frame content script and same-origin page bridge at exactly `http://localhost:4173` or `http://127.0.0.1:4173`. Fixed manifest public keys stabilize development extension IDs. The launcher targets the known GitHub provider; the provider accepts only the paired launcher.
+
+This reduces enrollment complexity in the owned local environment while preserving browser identities and validation. Development keys do not defend against someone modifying the unpacked source. Production onboarding and arbitrary provider registration remain open.
+
+Timeouts produce errors without automatic retries or cancellation. Search uses substrings, and commands take no input arguments in this first contract. Read the [protocol](/design/protocol/) for exact behavior.
+
+**Validation:** Registry and protocol unit tests plus full Chromium integration checks with both real extensions. GitHub navigation uses intercepted URL fixtures. Headless tests open the real popup document as a tab, so toolbar-popup presentation still needs a manual smoke check. The original proposed `Alt + Space` shortcut becomes `Alt + Shift + Space` in the development manifest.

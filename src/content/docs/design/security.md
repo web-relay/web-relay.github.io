@@ -6,8 +6,22 @@ description: Security principles and unresolved protocol requirements for browse
 A capability can modify application data, close tabs, or trigger workflows. The runtime must preserve browser security boundaries while making actions discoverable.
 
 :::note[Intent, not a security guarantee]
-These are requirements for a future implementation. No security-reviewed runtime exists yet.
+The development showcase implements the controls below, but has not undergone a security review. Broader production trust and permission flows remain requirements.
 :::
+
+## Current development controls
+
+- The PWA bridge checks same-window source and exact origin, and only runs in the top frame at `http://localhost:4173` or `http://127.0.0.1:4173`.
+- The launcher targets one fixed development GitHub provider ID. That provider allows only the paired launcher ID through `externally_connectable` and a sender check.
+- Only the launcher's own popup document may invoke its privileged internal API.
+- Wire requests and responses validate protocol version, request correlation, JSON shape, capability IDs, and provider identity.
+- Active tab ID and URL are rechecked before invocation; app availability is rechecked in the owning registry.
+- Disabling the GitHub provider prevents both listing and execution. Preferences survive service-worker restarts through extension storage.
+- The provider performs navigation only. It does not download executable adapters, inspect GitHub DOM selectors, use an API token, or perform account writes.
+
+Manifest public keys stabilize unpacked extension IDs. They are development pairing identities, not protection against a person who controls and modifies the unpacked source. Code running in the trusted PWA origin is part of the same trust boundary.
+
+The launcher requests `tabs`, `storage`, `clipboardWrite`, and local-host access. The GitHub provider requests access to `https://github.com/*`. Local host match patterns cover more ports than the script allows; the bridge checks the exact origin before installing its listener. Incremental production permission onboarding is not implemented yet.
 
 ## Principles from the product brief
 

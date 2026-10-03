@@ -16,10 +16,12 @@ export default defineConfig({
       { label: 'Start here', items: [
         { label: 'Overview', slug: 'overview' },
         { label: 'Why Web Relay?', slug: 'concepts/vision' },
+        { label: 'Run the showcase', slug: 'project/showcase' },
       ] },
       { label: 'System design', items: [
         { label: 'Architecture', slug: 'design/architecture' },
         { label: 'Capabilities & context', slug: 'design/capabilities' },
+        { label: 'Discovery & invocation', slug: 'design/protocol' },
         { label: 'Integration paths', slug: 'design/integrations' },
         { label: 'Trust & permissions', slug: 'design/security' },
       ] },

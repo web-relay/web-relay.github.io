@@ -3,7 +3,23 @@ title: MVP and roadmap
 description: The smallest useful proof, its acceptance criteria, and deliberately deferred work.
 ---
 
-The project is currently in **development scaffold and protocol design**. A pnpm monorepo contains a demo PWA and two extension starters; connected discovery and command execution remain to be built. The phases below describe a proposed sequence, not committed delivery dates.
+The project is currently a **working local showcase**. A notes PWA, launcher extension, independent GitHub provider, and browser actions share discovery and invocation contracts. The phases below remain a proposed sequence, not committed delivery dates.
+
+## Implemented showcase
+
+- Provider-owned registry with registration, unregister, and fresh availability checks.
+- Notes PWA using the SDK and a local palette, with persisted notes and an offline shell.
+- Launcher search and keyboard navigation, active-tab discovery, source labels, and errors.
+- Independent GitHub.com extension for repository navigation.
+- Browser URL copy, new tab, downloads, and tab duplication.
+- Versioned requests, validated responses, timeouts, and stale-context rejection.
+- Unit tests and full Chromium integration checks with both extensions installed.
+
+GitHub tests use intercepted URL fixtures. They exercise real cross-extension messaging and tab navigation without performing GitHub account actions. Headless tests open the real popup document in a tab; the toolbar popup itself is not inspected through Playwright.
+
+## Remaining before a broader MVP release
+
+Generic provider enrollment and approval, input schemas, production permission onboarding, broader lifecycle testing, and search ranking still need work. Search currently matches substrings rather than implementing fuzzy scoring. Discovery refreshes on open, refresh, and after invocation; provider updates do not continuously push into an open launcher.
 
 ## Phase 1 — prove the local loop
 
@@ -19,11 +35,11 @@ Build five pieces:
 
 | Source | Example actions |
 | --- | --- |
-| Personal PWA | Create note, search notes, sync data |
-| Tab Workspace Manager extension | Open AI workspace, restore coding workspace, save current workspace |
-| Browser | Copy current URL, open downloads, close current tab |
+| Notes demo PWA | Create note, pin selected note |
+| GitHub provider extension | Open project repository, current repository, issues, pull requests |
+| Browser | Copy current URL, open downloads, new tab, duplicate tab |
 
-“Sync data” is an example of app-owned behavior; it does not introduce a backend dependency into the launcher.
+The original PRD suggested a workspace extension; the first showcase uses a simpler GitHub navigation provider to prove the same independent-provider boundary.
 
 ## Acceptance criteria
 

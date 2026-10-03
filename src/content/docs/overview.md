@@ -8,12 +8,12 @@ Web Relay is the working project name for **Browser Capability Launcher**: a loc
 The idea is simple: applications expose useful actions through a common interface. A registry makes those capabilities discoverable, context-aware, and reusable across different interaction surfaces.
 
 :::caution[Project status]
-This is an early open source project with a development scaffold. A local demo PWA and two extension starters live in the runtime monorepo. Connected discovery and command execution are not implemented yet. There is no published launcher or installable SDK; API names, shortcuts, and transports remain proposals.
+A working local showcase now connects a notes PWA, launcher extension, GitHub provider extension, and browser actions. The SDK packages are private monorepo packages, not published releases. The broader platform design remains a proposal. Follow the [showcase guide](/project/showcase/) to run it.
 :::
 
 ## The first experience
 
-Open the launcher, search for an action, and execute it. The proposed extension shortcut is `Alt + Space`; shortcut conflicts and browser support need validation.
+Open the launcher, search for an action, and execute it. The development extension uses `Alt + Shift + Space`, or its toolbar button. The original brief suggested `Alt + Space`; browser shortcut constraints and conflicts motivated the development combination. Check `chrome://extensions/shortcuts` if your environment intercepts it.
 
 Inside a podcast PWA, the launcher might offer:
 

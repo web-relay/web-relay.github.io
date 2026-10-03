@@ -3,13 +3,15 @@ title: Integration paths
 description: How PWAs, extensions, browser commands, WebMCP, and legacy sites could expose capabilities.
 ---
 
+The working showcase includes a local notes PWA through `@web-relay/sdk`, an independent GitHub.com provider extension through the shared protocol, and built-in browser actions. Follow the [showcase guide](/project/showcase/) to try them.
+
 Different providers feed one internal model. Explicit app integrations should take priority over DOM-based automation.
 
 ## 1. PWA SDK — preferred path
 
 A self-developed app registers its own actions through the proposed core SDK. The bridge makes them discoverable by the extension, while the optional local UI provides a fallback.
 
-The target is a small integration: register the app’s existing functions and publish relevant context. There is no released package to install yet.
+The target is a small integration: register the app’s existing functions and publish relevant context. The private workspace SDK is implemented for the demo. There is no released package to install yet.
 
 ## 2. Native WebMCP — standards adapter
 
@@ -21,7 +23,7 @@ WebMCP is treated as an evolving integration target. Actual browser support, dis
 
 A workspace manager could expose “Open AI workspace,” “Restore coding workspace,” and “Save current workspace” using a provider SDK and cross-extension messaging.
 
-The MVP should demonstrate integration with one separate extension. Provider identity, allowed extension IDs, discovery, and request validation need explicit protocol decisions.
+The first implementation uses a GitHub navigation extension rather than a workspace manager. Fixed manifest public keys stabilize both development IDs; the provider accepts discovery and execution only from the paired launcher. Broader provider registration remains future work. See the [protocol](/design/protocol/).
 
 ## 4. Legacy site adapters — selective fallback
 

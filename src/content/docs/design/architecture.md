@@ -4,7 +4,7 @@ description: The capability registry, package boundaries, execution path, and lo
 ---
 
 :::note[Design proposal]
-The pnpm monorepo and three-app development structure are accepted decisions. Transport details and SDK APIs remain proposals. The current implementation is a scaffold, with no connected discovery or execution yet.
+The local showcase now implements a provider-owned registry, PWA SDK bridge, launcher UI, browser actions, and a paired GitHub provider extension. This is a development prototype, not a released or security-reviewed platform. Broader SDK APIs and provider enrollment remain proposals.
 :::
 
 ## One internal capability model
@@ -31,13 +31,14 @@ apps/
   launcher-extension/   Global launcher extension
   webapp-extension/     Independent provider for another web app
 packages/
-  core/                 Shared capability metadata; future registry
-  protocol/             Future validated discovery and invocation contracts
+  core/                 Provider-owned capability registry
+  protocol/             Validated versioned wire contracts
+  sdk/                  PWA SDK and page messaging
 ```
 
 Use pnpm workspace dependencies to share TypeScript contracts. Build the two extensions as separate unpacked installations. Their source lives together; their browser identities and permission boundaries remain separate.
 
-The demo PWA has an offline-capable shell. Both extensions have loadable starter manifests and popups. Provider discovery, runtime execution, trust approval, and command aggregation are not implemented yet.
+The notes PWA exposes create and pin actions through the SDK and its local palette. The launcher discovers the active demo app, the paired GitHub extension, and browser actions. GitHub capabilities navigate repository pages without DOM selectors or account writes. See the [showcase guide](/project/showcase/) for setup.
 
 The documentation remains in [web-relay.github.io](https://github.com/web-relay/web-relay.github.io), publishing at the organization’s root URL. Update it as implementation reveals details and decisions are accepted.
 
@@ -75,11 +76,11 @@ An application owns its functions and application state. The bridge should commu
 
 ## Extension discovery and local fallback
 
-The proposed discovery handshake is `launcher:hello` from the PWA and `launcher:ready` from the extension.
+The original brief proposed a `launcher:hello` / `launcher:ready` handshake. The first implementation uses discovery requests described below.
 
 When the extension is available, capabilities can appear in the global launcher. Without it, the application’s optional local palette should still work, using the same registrations. `Cmd/Ctrl + K` is the example in-app shortcut.
 
-Handshake timeouts, protocol versioning, lifecycle cleanup, and shortcut coordination are open implementation questions.
+The implemented prototype uses pull discovery and versioned, correlated `discover` and `execute` requests instead of the proposed hello/ready handshake. It does not maintain a continuously pushed registry. Opening or refreshing the launcher discovers current commands; execution rechecks the active tab and availability. See the [current protocol](/design/protocol/).
 
 ## No backend in the critical path
 
