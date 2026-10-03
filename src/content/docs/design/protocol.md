@@ -3,7 +3,7 @@ title: Discovery and invocation contract
 description: The implemented version 1 development protocol and its trust and lifecycle boundaries.
 ---
 
-The showcase uses a small, JSON-only protocol shared by the launcher, PWA bridge, and GitHub provider. It supports **discovery**, **execution without arguments**, and **bounded text input** for question actions. Broader schemas and generic provider enrollment remain deferred.
+The showcase uses a small, JSON-only protocol shared by the launcher, PWA bridge, GitHub provider, and separate LLM provider. It supports **discovery**, **execution without arguments**, and **bounded text input** for question actions. Broader schemas and generic provider enrollment remain deferred.
 
 ## Provider-owned registries
 
@@ -28,7 +28,7 @@ The current providers are `demo-notes` (`pwa`), `github` (`extension`), and `bro
 
 An execution request uses `"type": "execute"` and adds `"capabilityId": "github.repo-issues"`. A text-input execution request also includes `"input": "your question"`, limited to 2000 characters. The registry requires nonblank text for a text-input capability and rejects arguments for no-input capabilities. The caller generates a fresh request ID. Unsupported versions and malformed messages are ignored by provider listeners and rejected by the caller if they do not produce a valid correlated response.
 
-Tab context is optional. The GitHub provider receives it only for GitHub.com tabs; its global project-navigation action needs no repository context. PWA application context remains local and is supplied by the SDK registry’s context callback.
+Tab context is optional. The GitHub provider receives it only for GitHub.com tabs; its global project-navigation action needs no repository context. The LLM provider receives HTTP(S) source-tab context and uses its URL as the first message context for a new chat. PWA application context remains local and is supplied by the SDK registry’s context callback.
 
 ## Responses
 
@@ -53,7 +53,7 @@ The caller validates version, response shape, matching request ID, JSON data, me
 
 **PWA:** the launcher sends a request to the active tab’s top-frame content script. The content script relays it through `window.postMessage`, with `source: "web-relay:extension"`. The SDK replies using `source: "web-relay:pwa"`. Window source, exact origin, and request correlation are checked.
 
-**GitHub extension:** the launcher uses `chrome.runtime.sendMessage` with the known provider extension ID. The provider accepts requests only from the paired development launcher ID.
+**Provider extensions:** the launcher uses `chrome.runtime.sendMessage` with the known provider extension ID. Each provider accepts requests only from the paired development launcher ID. The separate LLM provider uses `createExtensionProvider` from `@web-relay/sdk/extension` for validation, provider-owned registration, execution, and response envelopes.
 
 **Browser:** built-in commands use the local registry. Clipboard results are copied by the foreground UI. AI handoffs copy the question or URL first, then ask the broker to open an allowlisted ChatGPT or Gemini destination. No prompt is automatically submitted.
 

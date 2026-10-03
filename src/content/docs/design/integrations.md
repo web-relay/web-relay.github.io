@@ -3,7 +3,7 @@ title: Integration paths
 description: How PWAs, extensions, browser commands, WebMCP, and legacy sites could expose capabilities.
 ---
 
-The working showcase includes a local notes PWA through `@web-relay/sdk`, an independent GitHub.com provider extension through the shared protocol, and built-in browser actions. Follow the [showcase guide](/project/showcase/) to try them.
+The working showcase includes a local notes PWA through `@web-relay/sdk`, an independent GitHub.com provider extension through the shared protocol, built-in browser actions, and a separately built LLM provider using `@web-relay/sdk/extension`. Follow the [showcase guide](/project/showcase/) to try them.
 
 Different providers feed one internal model. Explicit app integrations should take priority over DOM-based automation.
 
@@ -38,3 +38,9 @@ The launcher can supply actions such as copying the current URL, switching tabs,
 ## MVP versus follow-on work
 
 The first milestone includes PWA integration, one extension provider, and browser-native commands. WebMCP and legacy adapters are documented design paths to explore after that core workflow is proven.
+
+## Independent LLM provider
+
+The separate `llm-provider-extension` folder uses the extension SDK to register ChatGPT and Gemini actions. It opens a fresh destination tab and sends one message with the source URL as context. It uses app-specific content scripts rather than an undocumented prompt URL. If login or changed controls prevent sending, the destination panel retains the prompt for manual use. Source page contents are not extracted.
+
+The development build bundles shared SDK source from the sibling checkout; the installed extension has no filesystem dependency. Fixed manifest public keys and an explicit paired provider ID keep discovery reproducible. Published SDK packages and generic enrollment remain future work. See [installation and validation](/project/showcase/#separate-llm-provider).
