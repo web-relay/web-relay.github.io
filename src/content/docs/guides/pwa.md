@@ -3,7 +3,7 @@ title: Enable a PWA or web app
 description: Register app-owned capabilities using the SDK and configure the launcher's exact-origin page bridge.
 ---
 
-Use this integration in an existing web app or PWA. Install the [SDK tarball](/guides/sdk/) and include it in your normal browser bundle. PWA installation is optional: the bridge works in a normal browser tab on a configured origin.
+Use this integration in an existing web app or PWA. Install the [SDK](/guides/sdk/) and include it in your normal browser bundle. PWA installation is optional: the bridge works in a normal browser tab on a configured origin.
 
 ## Own the registry in the app
 
@@ -12,6 +12,7 @@ import { createLauncher } from '@web-relay/sdk';
 
 const app = createLauncher({
   providerId: 'my-notes',
+  name: 'My notes',
   context: () => ({ selected: notesStore.selectedNote }),
 });
 
@@ -49,13 +50,13 @@ The root path `/` pairs only the home page. Other paths, such as `/quick-log/`, 
 
 Saved apps can be disabled, enabled, or removed in settings. Removing a pairing stops routing; host permission remains until revoked in Chromium extension site settings because another app may share the host. Revoking host permission prevents further discovery and execution.
 
-The development SDK adds optional `name` and PWA `describe`, plus requests addressed with `providerId`. A mounted registry ignores another provider's addressed requests. Published SDK 0.1.3 can pair via nonempty validated discovery and supports separate apps on different paths. Multiple registries mounted simultaneously on one page need the development tarball. These SDK changes have not been published as a new npm release.
+SDK 0.1.4 adds optional `name` and PWA `describe`, plus requests addressed with `providerId`. A mounted registry ignores another provider's addressed requests. Published SDK 0.1.3 can pair via nonempty validated discovery and supports separate apps on different paths. Multiple registries mounted simultaneously on one page need SDK 0.1.4 or later.
 
 Bundled development defaults remain in `apps/launcher-extension/src/providers.ts`; they retain their manifest access. Launcher 0.0.2 and older still require source `pwaProviders`, matching manifest host permissions/content scripts, rebuild, and reload for additional PWA hosts.
 
 ## Registration and lifecycle
 
-Use at most 50 registered commands per PWA/extension registry. IDs are at most 80 characters; titles are nonblank and at most 120; descriptions are nonblank and at most 300. The development SDK rejects invalid metadata and the 51st command during registration, matching discovery validation.
+Use at most 50 registered commands per PWA/extension registry. IDs are at most 80 characters; titles are nonblank and at most 120; descriptions are nonblank and at most 300. SDK 0.1.4 rejects invalid metadata and the 51st command during registration, matching discovery validation.
 
 `dispose()` removes the listener but does not cancel already-running actions; an in-flight reply can still be posted after disposal. Request IDs are not deduplicated, so repeated requests can repeat side effects. A navigation timer does not acknowledge that the extension received a result. Reliable result-before-navigation acknowledgement remains future work.
 

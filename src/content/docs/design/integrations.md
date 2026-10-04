@@ -11,7 +11,7 @@ Different providers feed one internal model. Explicit app integrations should ta
 
 A self-developed app registers its own actions through the proposed core SDK. The bridge makes them discoverable by the extension, while the optional local UI provides a fallback.
 
-The target is a small integration: register the app’s existing functions and publish relevant context. SDK 0.1.3 is published on npm and also supports a standalone development tarball with JavaScript and declarations. Follow the [PWA integration guide](/guides/pwa/) to install and pair it.
+The target is a small integration: register the app’s existing functions and publish relevant context. SDK 0.1.4 is published on npm and also supports a standalone development tarball with JavaScript and declarations. Follow the [PWA integration guide](/guides/pwa/) to install and pair it.
 
 ## 2. Native WebMCP — standards adapter
 

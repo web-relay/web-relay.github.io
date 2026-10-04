@@ -4,7 +4,7 @@ description: The capability registry, package boundaries, execution path, and lo
 ---
 
 :::note[Design proposal]
-The local showcase now implements a provider-owned registry, PWA SDK bridge, launcher UI, browser actions, and a paired GitHub provider extension. This is a development prototype, not a released or security-reviewed platform. Broader SDK APIs and PWA enrollment remain proposals.
+The local showcase now implements a provider-owned registry, PWA SDK bridge, launcher UI, browser actions, and a paired GitHub provider extension. This is a development prototype, not a released or security-reviewed platform. PWA enrollment is implemented in launcher 0.0.3; broader SDK APIs remain proposals.
 :::
 
 ## One internal capability model

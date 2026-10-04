@@ -5,11 +5,11 @@ description: Build and consume the standalone SDK package, and distinguish packa
 
 ## Distribution status
 
-`@web-relay/sdk` version **0.1.3** provides bundled ESM JavaScript and TypeScript declarations for both PWAs and Chromium extensions, with no runtime npm dependencies. Install the published package in your existing project:
+`@web-relay/sdk` version **0.1.4** provides bundled ESM JavaScript and TypeScript declarations for both PWAs and Chromium extensions, with no runtime npm dependencies. Install the published package in your existing project:
 
 ```sh
-pnpm add @web-relay/sdk@0.1.3
-# or: npm install @web-relay/sdk@0.1.3
+pnpm add @web-relay/sdk@0.1.4
+# or: npm install @web-relay/sdk@0.1.4
 ```
 
 For development, build and install a tarball from the runtime source.
@@ -21,10 +21,10 @@ pnpm install --frozen-lockfile
 pnpm pack:sdk
 ```
 
-This creates `artifacts/web-relay-sdk-0.1.3.tgz`. Install it from a separate project:
+This creates `artifacts/web-relay-sdk-0.1.4.tgz`. Install it from a separate project:
 
 ```sh
-pnpm add /absolute/path/to/web-relay/artifacts/web-relay-sdk-0.1.3.tgz
+pnpm add /absolute/path/to/web-relay/artifacts/web-relay-sdk-0.1.4.tgz
 ```
 
 CI also uploads a `web-relay-sdk` tarball artifact in the [runtime repository](https://github.com/web-relay/web-relay/actions). Download and install that file when testing development changes. A CI artifact is distinct from an npm release. Tarball installation adds the SDK to your project's package dependencies. Use your existing browser bundler; no workspace TypeScript path aliases or private core/protocol packages are required.
@@ -51,7 +51,7 @@ SDK installation does not automatically register a provider with the launcher. L
 
 SDK **0.1.3** responds to `describe` with `{providerId, name, protocolVersion: 1}`, without loading commands or running actions. `createExtensionProvider` accepts optional `name`, defaulting to the provider ID. This allows pairing when no commands are available. Older providers can pair through validated discovery if they expose at least one command.
 
-The provider must still authorize the actual launcher ID. Bundled defaults and [PWA origins](/guides/pwa/) remain in `apps/launcher-extension/src/providers.ts`. Development launcher 0.0.3 adds explicit [PWA settings pairing](/guides/pwa/#pair-in-launcher-settings) with optional host permission approval and path scopes. The development PWA SDK adds name/describe, provider-addressed requests and registration validation for the 50-command/300-character limits. These source changes are not a new npm publication. Installed SDK 0.1.3 supports pairing through validated discovery for apps on separate paths. General input schemas and workflow composition remain future work.
+The provider must still authorize the actual launcher ID. Bundled defaults and [PWA origins](/guides/pwa/) remain in `apps/launcher-extension/src/providers.ts`. Development launcher 0.0.3 adds explicit [PWA settings pairing](/guides/pwa/#pair-in-launcher-settings) with optional host permission approval and path scopes. SDK 0.1.4 adds name/describe, provider-addressed requests and registration validation for the 50-command/300-character limits. See the [SDK 0.1.4 release notes](https://github.com/web-relay/web-relay/blob/main/packages/sdk/CHANGELOG.md). Installed SDK 0.1.3 supports pairing through validated discovery for apps on separate paths. General input schemas and workflow composition remain future work.
 
 ## Coding agents
 

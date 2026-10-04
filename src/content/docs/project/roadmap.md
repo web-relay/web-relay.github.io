@@ -9,6 +9,8 @@ The project is currently a **working local showcase**. A notes PWA, launcher ext
 
 - Provider-owned registry with registration, unregister, and fresh availability checks.
 - Async extension registration from saved configuration.
+- Settings-based PWA pairing with optional host access and shared-origin path routing.
+- SDK 0.1.4 PWA identity/addressing and early registration validation.
 - Settings-based extension pairing, connection checks, explicit approval, optional tab-URL sharing, and disable/removal.
 - Notes PWA using the SDK and a local palette, with persisted notes and an offline shell.
 - Injected launcher dialog, search and keyboard navigation, active-tab discovery, source labels, and errors.

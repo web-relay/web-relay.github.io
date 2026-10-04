@@ -8,7 +8,7 @@ Web Relay is the working project name for **Browser Capability Launcher**: a loc
 The idea is simple: applications expose useful actions through a common interface. A registry makes those capabilities discoverable, context-aware, and reusable across different interaction surfaces.
 
 :::caution[Project status]
-A working local showcase now connects a notes PWA, launcher extension, GitHub provider extension, and browser actions. The standalone SDK is published on npm, and additional extensions can be approved in launcher settings. The broader platform design remains a proposal. Follow the [showcase guide](/project/showcase/) to run it.
+A working local showcase now connects a notes PWA, launcher extension, GitHub provider extension, and browser actions. The standalone SDK is published on npm, and additional extensions and web apps can be approved in launcher settings. The broader platform design remains a proposal. Follow the [showcase guide](/project/showcase/) to run it.
 :::
 
 ## The first experience

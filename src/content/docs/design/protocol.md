@@ -28,11 +28,13 @@ Default providers are `demo-notes` (`pwa`), `github` and `llm` (`extension`), an
 
 An execution request uses `"type": "execute"` and adds `"capabilityId": "github.repo-issues"`. A text-input execution request also includes `"input": "your question"`, limited to 2000 characters. The registry requires nonblank text for a text-input capability and rejects arguments for no-input capabilities. The caller generates a fresh request ID. Unsupported versions and malformed messages are ignored by provider listeners and rejected by the caller if they do not produce a valid correlated response.
 
+PWA requests can include `providerId`. SDK 0.1.4 ignores requests addressed to another mounted provider; unaddressed requests remain compatible. The launcher addresses discovery and execution to the paired provider after checking its exact origin and path.
+
 Tab context is optional. The GitHub provider receives it only for GitHub.com tabs; its global project-navigation action needs no repository context. The LLM provider receives HTTP(S) source-tab context and uses its URL as the first message context for a new chat. PWA application context remains local and is supplied by the SDK registry’s context callback.
 
-## Extension identity for pairing
+## Provider identity for pairing
 
-SDK 0.1.3 accepts a context-free `"type": "describe"` request and replies with `{ "providerId": "workspaces", "name": "Saved workspaces", "protocolVersion": 1 }` in the ordinary correlated success envelope. It validates the paired launcher sender first, then answers without registration or actions. Names are provider-reported rather than verified browser/store names. Published PWA SDK 0.1.3 rejects describe; the development PWA SDK responds with the same identity, and supports optional providerId addressing. Older PWAs pair through validated nonempty discovery.
+SDK 0.1.3 accepts a context-free `"type": "describe"` request and replies with `{ "providerId": "workspaces", "name": "Saved workspaces", "protocolVersion": 1 }` in the ordinary correlated success envelope. It validates the paired launcher sender first, then answers without registration or actions. Names are provider-reported rather than verified browser/store names. Published PWA SDK 0.1.3 rejects describe; PWA SDK 0.1.4 responds with the same identity, and supports optional providerId addressing. Older PWAs pair through validated nonempty discovery.
 
 The settings page checks connectivity, reviews identity, and explicitly approves a short-lived proposal bound to that settings document. Approval rechecks identity before storing the pairing. Older extension providers may ignore `describe`; the launcher can fall back to validated nonempty discovery. It cannot infer an older provider's identity from an empty command list. Disabled/removed providers cannot route future invocations. Current-tab context is only sent to additional providers when the user approves URL sharing.
 
