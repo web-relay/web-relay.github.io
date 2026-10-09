@@ -61,7 +61,7 @@ The first milestone succeeds when:
 
 ## Phase 2 — evaluate adapters
 
-The opt-in [WebMCP preview adapter](/guides/webmcp/) now supports top-level page discovery and execution with JSON arguments, plus approved saved site catalogs available across tabs and page reopening on invocation. Continue evaluating browser API compatibility and a small number of stable legacy integrations. Validate compatibility and maintenance assumptions before expanding coverage.
+The opt-in [WebMCP preview adapter](/guides/webmcp/) now supports top-level page discovery and execution with generated required root-field forms (nested and optional input controls remain unsupported), plus approved saved site catalogs available across tabs and page reopening on invocation. Continue evaluating browser API compatibility and a small number of stable legacy integrations. Validate compatibility and maintenance assumptions before expanding coverage.
 
 ## Later possibilities
 

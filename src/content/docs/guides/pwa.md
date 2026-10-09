@@ -42,11 +42,15 @@ Development launcher **0.0.3** supports PWA pairing without editing source or re
 2. Open launcher Options (Capability sources → Manage extension providers), then **Pair a web app**.
 3. Enter the full app URL and click **Check app connection**. Approve Chromium's host access prompt.
 4. Review the self-reported provider identity, exact origin, and path, then click **Approve app pairing**.
-5. Return to the app and refresh the launcher. Existing open tabs receive the bridge on demand.
+5. Open or refresh the launcher on any tab. Existing app tabs receive the bridge on demand.
 
 Reload the built launcher once when upgrading from 0.0.2. Host access alone does not enroll an app. Pairing proposals expire after five minutes, belong to the settings document, and are rechecked before saving. Missing permission, multiple matching tabs, missing SDK listeners, changed identities and invalid responses appear as actionable diagnostics.
 
 The root path `/` pairs only the home page. Other paths, such as `/quick-log/`, match that path and its subpages, with segment boundaries. Pair sibling GitHub Pages apps separately; pairing `https://page-apps.github.io/` does not pair `/quick-log/`. Exact scheme, host and port still matter. Chromium host permission covers more paths and ports than app routing; Web Relay checks the approved origin and path independently. Paths route apps but are not a security boundary between same-origin scripts.
+
+Launcher **0.0.5** shows enabled paired apps across tabs. Discovery reads each app's own tab and caches its available command metadata. If the app is closed, its saved actions remain visible; running one opens the approved app path in a background tab and checks live availability before execution. Listing actions never opens pages. Existing pairings need no new approval: open each app once to populate its catalog after upgrading. Commands that depend on app state may be unavailable after reopening; functions and live state stay in the app.
+
+Requests use the owning app's tab, URL, and document rather than the caller's page. If multiple app tabs match, open the launcher inside the intended app tab or close duplicates. Redirects outside the paired origin/path, stale caller context, removed or disabled pairings, and revoked permission block execution. Execution is sent once; discovery may wait for an app's bridge to load. A timeout does not cancel a delivered action.
 
 Saved apps can be disabled, enabled, or removed in settings. Removing a pairing stops routing; host permission remains until revoked in Chromium extension site settings because another app may share the host. Revoking host permission prevents further discovery and execution.
 
@@ -66,4 +70,4 @@ Open the app in a normal Chromium tab and invoke the launcher. Check that your p
 
 The app does not require a backend, a global registry, or an always-running extension worker. Discovery is pulled when the launcher opens/refreshes and before execution. Automatic push updates, structured input schemas beyond bounded text, duplicate invocation handling, and navigation acknowledgement remain future work.
 
-The committed [Chromium PWA pairing test](https://github.com/web-relay/web-relay/blob/main/tests/pwa-pairing.mjs) covers actual launcher discovery/execution, stale context, approval rejection, shared-origin routing, provider addressing, errors, disable/remove and teardown/remount. Run `pnpm test:e2e` after building. `pnpm test:hub` additionally checks the deployed Personal Hub and intercepts child navigation to avoid account writes. The disposable test launcher pregrants only the fixture host because headless CI cannot approve Chromium's native host permission prompt; production settings request permission interactively.
+The committed [Chromium PWA pairing test](https://github.com/web-relay/web-relay/blob/main/tests/pwa-pairing.mjs) covers actual launcher discovery/execution, stale context, approval rejection, shared-origin routing, cross-tab execution, closed-app catalog persistence and background reopening, duplicate-tab rejection, provider addressing, errors, disable/remove and teardown/remount. Run `pnpm test:e2e` after building. `pnpm test:hub` additionally checks the deployed Personal Hub and intercepts child navigation to avoid account writes. The disposable test launcher pregrants only the fixture host because headless CI cannot approve Chromium's native host permission prompt; production settings request permission interactively.

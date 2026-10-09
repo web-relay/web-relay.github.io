@@ -7,16 +7,24 @@ The launcher supports native WebMCP tools through an opt-in adapter. A site that
 
 ## Register a site
 
-1. Build the runtime with `pnpm build` and reload `apps/launcher-extension/dist` in `chrome://extensions`.
+1. Launcher **0.0.4** adds required-field forms. Build the runtime with `pnpm build` and reload `apps/launcher-extension/dist` in `chrome://extensions`.
 2. Enable `chrome://flags/#enable-webmcp-testing` in a Chrome build supporting the preview, then relaunch. See [Chrome's WebMCP documentation](https://developer.chrome.com/docs/ai/webmcp).
 3. Open Web Relay, expand **Capability sources**, and choose **Manage WebMCP sites**. You can also open the extension's Options page directly.
 4. Under **Register a WebMCP site**, enter the exact page URL, such as `https://cmwen.dev/`, and an optional site name.
 5. Click **Check WebMCP site**, approve the browser's site-access request, and review the URL and discovered tools. Checking opens the page in a background tab if it is closed; no tool runs during registration.
 6. Click **Register site**. The saved tools now appear in the launcher from any tab.
 
-Select a tool, review its description and JSON Schema, enter a JSON object (use `{}` for no arguments), and click **Run action**. A search on `cmwen.dev` can use `{"query":"WebMCP"}`.
+Select a tool, fill its required fields, and click **Run action**. The launcher reads the tool contract and builds the JSON arguments for you. For `cmwen.dev`, enter your search text in **Query**.
 
-The browser validates the arguments against the site's schema. Web Relay checks JSON syntax and requires an object with at most 2000 input characters. Results are shown as plain text, limited to 8000 characters. A page result cannot instruct the launcher to copy content or open another tab.
+The browser validates the arguments against the site's schema. The launcher checks required controls and basic string lengths and numeric bounds before sending. Arguments must fit within 2000 JSON characters. Results are shown as plain text, limited to 8000 characters. A page result cannot instruct the launcher to copy content or open another tab.
+
+## Form limitations
+
+Forms show **only fields listed in the root object's `required` array**. Supported controls are text inputs for strings, number inputs for numbers/integers, and dropdowns for booleans and homogeneous scalar enums. Labels and help text come from the property's `title` and `description`; readable property names are the fallback. Declared scalar defaults prefill supported controls.
+
+Optional fields are omitted from the arguments, including optional nested filters. For the blog's search tool, only Query is shown; kinds, language, tags, and limit are not configurable in this version. If no root fields are required, the tool receives `{}`.
+
+**Nested objects and arrays are not supported.** Required object/array fields, type unions, `$ref`, and constant-only and conditional/composed schemas do not generate a form. The launcher explains the limitation and disables Run action; it does not silently omit required inputs. There is no raw-JSON editor or optional-field editor in this version. The browser remains responsible for full JSON Schema validation, including constraints beyond the basic checks in the form.
 
 ## Saved pages and tools
 
@@ -44,12 +52,12 @@ Every invocation requires an explicit **Run action** after reviewing the inputs.
 
 The adapter supports `document.modelContext.getTools()` and `executeTool()`. Before Chrome 155 it passes serialized JSON arguments; from Chrome 155 it passes an object, following the documented API change. It also feature-detects the earlier `navigator.modelContextTesting.listTools()` / `executeTool(name, JSON)` surface. Schemas returned as JSON strings or objects are normalized; property order does not count as a schema change. Execution is never retried with a different signature.
 
-When the preview API is unavailable, other launcher sources continue working. General schema-based form controls, iframe tools, pushed `toolchange` updates, agent execution, and exposing SDK capabilities through WebMCP remain future work.
+When the preview API is unavailable, other launcher sources continue working. Nested/optional input controls, iframe tools, pushed `toolchange` updates, agent execution, and exposing SDK capabilities through WebMCP remain future work.
 
 ## Verification
 
 [Native adapter](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/webmcp.ts) · [Saved-site routing](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/webmcp-sites.ts) · [Saved-site Chromium test](https://github.com/web-relay/web-relay/blob/main/tests/webmcp-sites.mjs)
 
-Run `pnpm test:e2e` after building. Tests enable Chromium's native preview and load both extensions. They cover current-page execution, registration review, global invocation, tab reuse and reopening, delayed registration, duplicate tabs, changed schemas and removed tools, disabled/removed sites, and permission rejection. Account writes use local fixtures; permission revocation is simulated because the disposable fixture uses required loopback access.
+Run `pnpm test:e2e` after building. Tests enable Chromium's native preview and load both extensions. They cover required root-field forms, scalar/choice types, optional-field omission, unsupported nested fields, current-page execution, registration review, global invocation, tab reuse and reopening, delayed registration, duplicate tabs, changed schemas and removed tools, disabled/removed sites, and permission rejection. Account writes use local fixtures; permission revocation is simulated because the disposable fixture uses required loopback access.
 
 Run `node tests/webmcp-sites.mjs --live-site` to additionally verify registration of `https://cmwen.dev/` and global discovery after closing its page, without invoking any live site tool. The optional live check pregrants only that host in a disposable launcher copy because headless Chromium cannot approve the native host-access prompt.

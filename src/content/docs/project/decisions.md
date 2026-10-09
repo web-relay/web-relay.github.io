@@ -185,3 +185,13 @@ Native WebMCP tools are a launcher-local source, independent of the SDK protocol
 ## Saved WebMCP sites
 
 User-approved exact page URLs and tool catalogs persist independently of page lifetimes. List catalogs globally without opening pages; resolve the owning tab only when checking, refreshing, approving, or invoking. Reuse exactly one matching tab or open a background tab, reject duplicate tabs and redirects, and revalidate live metadata/schema before executing once. Cached descriptors never authorize execution after disabling/removing a site or losing browser access. A changed tool refreshes metadata and requires the user to review a fresh selection. Keep the source tab active and do not share its URL with the provider page. See [saved-site routing](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/webmcp-sites.ts) and the [guide](/guides/webmcp/).
+
+
+## Required root-field WebMCP forms
+
+Generate inputs from the root schema's required list, supporting strings, numbers/integers, booleans, and scalar enums. Omit optional fields and use only declared defaults. Reject required nested objects, arrays, references, and composed/conditional contracts with an explicit unsupported message and disabled execution. No raw-JSON editor is included in this limited form implementation. The browser remains the full schema validator. See [limitations](/guides/webmcp/#form-limitations) and [form implementation](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/webmcp-form.ts).
+
+
+## Global paired web app actions
+
+Launcher 0.0.5 discovers enabled paired SDK apps independently of the caller's URL. Persist validated command metadata at approval and after live discovery, hydrating old pairings when their app is next open. Closed apps retain their catalog; listing never opens pages. Invocation reuses the owning app tab or opens the approved path in the background, checks origin/path and live availability, binds discovery and execution to one document, and rechecks caller context and saved authorization. Multiple matching tabs require using the launcher in the intended app tab or closing duplicates. Send execution once; retries only probe discovery while loading. Functions and live state remain app-owned. See [routing implementation](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/pwa-sources.ts) and the [PWA guide](/guides/pwa/#pair-in-launcher-settings).
