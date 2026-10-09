@@ -33,7 +33,7 @@ The initial audience is developers and technical power users who build personal 
 
 An application already understands its data and authenticated session. Instead of recreating its behavior through generic automation, it exposes an explicit action. Web Relay supplies discovery and invocation while the application keeps ownership of the actual logic.
 
-A shared capability can appear in an app’s own palette and the global launcher. Future adapters could expose the same model to WebMCP, agents, voice, or devices.
+A shared capability can appear in an app’s own palette and the global launcher. The opt-in [WebMCP preview adapter](/guides/webmcp/) consumes native page tools. Future adapters could expose the same model to agents, voice, or devices.
 
 ## What we want to prove first
 

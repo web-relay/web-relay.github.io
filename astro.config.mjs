@@ -22,6 +22,7 @@ export default defineConfig({
         { label: 'Install the SDK', slug: 'guides/sdk' },
         { label: 'Extension provider', slug: 'guides/extensions' },
         { label: 'PWA or web app', slug: 'guides/pwa' },
+        { label: 'WebMCP preview', slug: 'guides/webmcp' },
       ] },
       { label: 'System design', items: [
         { label: 'Architecture', slug: 'design/architecture' },

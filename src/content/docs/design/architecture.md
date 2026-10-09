@@ -13,7 +13,7 @@ The local showcase now implements a provider-owned registry, PWA SDK bridge, lau
 PWA SDK ─────────────────┐
 Extension provider ──────┤
 Browser commands ────────┼──→ Capability registry
-WebMCP adapter (later) ──┤         │
+WebMCP adapter (preview) ──┤         │
 Legacy adapter (later) ──┘         ├── Browser launcher
                                   ├── In-app palette
                                   └── Future interfaces

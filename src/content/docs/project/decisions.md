@@ -175,3 +175,13 @@ Root scopes match only the home page; other path scopes include subpages at segm
 Validate provider/capability metadata and the 50-command/300-character description limits during registration. Browser-owned tab actions retain their larger local registry. Document that disposal does not cancel pending work, request IDs are not deduplicated, and navigation timers do not acknowledge result delivery. SDK 0.1.4 contains these API and validation changes; its [release notes](https://github.com/web-relay/web-relay/blob/main/packages/sdk/CHANGELOG.md) describe compatibility and limits.
 
 **Implementation:** [PWA pairing and transport](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/pwa-pairing.ts), [PWA SDK](https://github.com/web-relay/web-relay/blob/main/packages/sdk/src/index.ts), and [committed Chromium pairing/hub test](https://github.com/web-relay/web-relay/blob/main/tests/pwa-pairing.mjs). See the [PWA setup guide](/guides/pwa/). Headless tests pregrant only the fixture host in a disposable launcher copy; Chromium's native interactive permission prompt requires manual verification.
+
+
+## WebMCP preview adapter
+
+Native WebMCP tools are a launcher-local source, independent of the SDK protocol. The user enables preview discovery and explicitly reviews JSON arguments before each invocation. Use existing activeTab access, discover only top-page tools, bind selections to document identity, and recheck name/schema before execution. Page output is bounded plain text and cannot become launcher clipboard/navigation directives. Feature-detect current document.modelContext and the earlier modelContextTesting surface; choose the documented execution signature by Chrome version without retrying writes. See the [guide](/guides/webmcp/) and [implementation](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/webmcp.ts).
+
+
+## Saved WebMCP sites
+
+User-approved exact page URLs and tool catalogs persist independently of page lifetimes. List catalogs globally without opening pages; resolve the owning tab only when checking, refreshing, approving, or invoking. Reuse exactly one matching tab or open a background tab, reject duplicate tabs and redirects, and revalidate live metadata/schema before executing once. Cached descriptors never authorize execution after disabling/removing a site or losing browser access. A changed tool refreshes metadata and requires the user to review a fresh selection. Keep the source tab active and do not share its URL with the provider page. See [saved-site routing](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/webmcp-sites.ts) and the [guide](/guides/webmcp/).

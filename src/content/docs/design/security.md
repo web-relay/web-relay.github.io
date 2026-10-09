@@ -11,6 +11,8 @@ The development showcase implements the controls below, but has not undergone a 
 
 ## Current development controls
 
+- Saved WebMCP sites require an exact page URL, optional browser site access, settings-only tool review, and revalidated approval. Only metadata persists. Execution rediscovers the selected tool in an existing or reopened tab and rechecks URL, document, metadata, permissions, and saved authorization. The source tab context is not passed to the owning page. Disabling/removing a site or revoking host access stops execution.
+
 - The PWA bridge checks same-window source and exact origin, and only forwards in the top frame. The broker routes to bundled development origins or explicitly approved saved origin/path pairings.
 - The launcher targets bundled GitHub/LLM defaults plus extension IDs explicitly approved in its Options page and saved locally. Settings checks connectivity and rechecks identity at approval; provider names are self-reported. Only the extension settings document can change pairings. Additional providers receive no tab context unless URL sharing is approved. Each provider allows only the paired launcher ID through `externally_connectable` and a sender check.
 - The injected UI’s privileged messages require this extension’s own top-frame sender, bound to its tab and URL. The extension’s own diagnostic document is also permitted. Page-bridge messages cannot invoke the panel API, and synthetic page clicks do not execute UI actions.

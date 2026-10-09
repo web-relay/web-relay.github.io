@@ -15,7 +15,7 @@ The target is a small integration: register the app’s existing functions and p
 
 ## 2. Native WebMCP — standards adapter
 
-The design proposes translating WebMCP tools into internal capabilities and optionally exposing registered capabilities through WebMCP.
+The launcher now has an opt-in native WebMCP adapter for top-level page tools, JSON arguments, schema review, and page-owned execution. Saved site registrations expose tools globally and reopen the owning page when needed. Existing WebMCP sites need no additional SDK. Follow the [WebMCP preview guide](/guides/webmcp/). Exposing SDK capabilities through WebMCP remains proposed.
 
 WebMCP is treated as an evolving integration target. Actual browser support, discovery, API semantics, and permission behavior must be verified during implementation. Web Relay’s model should remain independent of the standard.
 
@@ -37,7 +37,7 @@ The launcher can supply actions such as copying the current URL, switching tabs,
 
 ## MVP versus follow-on work
 
-The first milestone includes PWA integration, one extension provider, and browser-native commands. WebMCP and legacy adapters are documented design paths to explore after that core workflow is proven.
+The first milestone includes PWA integration, one extension provider, and browser-native commands. An opt-in WebMCP preview adapter now extends that core workflow. Legacy adapters remain a proposed follow-on path.
 
 ## Independent LLM provider
 
