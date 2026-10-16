@@ -106,8 +106,14 @@ The provider must still allow the launcher's actual ID in both its manifest and 
 
 SDK **0.1.3** adds optional `name` and a sender-validated `describe` response, so an extension can pair even when it has no commands. This response does not run `register` or actions. Older SDK providers can pair through discovery when at least one command is available; the provider ID becomes the review label. Protocol version 1 remains in use.
 
-Bundled GitHub/LLM defaults remain in `apps/launcher-extension/src/providers.ts`. An optional `contextOrigins` filters context for those defaults; `enabledSetting` retains the GitHub preference. Development launcher 0.0.3 adds [PWA settings pairing](/guides/pwa/#pair-in-launcher-settings) with optional host access and origin/path scopes. Installing the SDK alone never approves pairing.
+Bundled GitHub/LLM/Dev Tunnel defaults remain in `apps/launcher-extension/src/providers.ts`. An optional `contextOrigins` filters context for those defaults; `enabledSetting` retains the GitHub preference. Development launcher 0.0.3 adds [PWA settings pairing](/guides/pwa/#pair-in-launcher-settings) with optional host access and origin/path scopes. Installing the SDK alone never approves pairing.
 
 ## Verify
 
 Load the real launcher and your provider in Chromium. Check discovery, one invocation, no-context availability, stale page rejection, returned errors, and removal when the provider is unavailable. Disable the provider extension and confirm its commands disappear after refresh. Use fixtures for account writes unless a live action is explicitly authorized. The [LLM integration](/project/showcase/#separate-llm-provider) demonstrates an independently installed provider.
+
+## Preconfigured Dev Tunnel
+
+The latest development launcher includes the workspace’s [Dev Tunnel extension](https://github.com/web-relay/web-relay-workspace/tree/main/ssh-dev-extension) at its fixed ID `kdmgihcbblbplehcahcmcbombjkknhom`. Reload both extensions after building; no manual pairing is needed. Its actions receive no current-tab URL context. **Capability sources → Enable Dev Tunnel provider** controls access. Earlier saved Dev Tunnel pairings, including path-derived IDs and URL-sharing choices, migrate to this fixed route while retaining an existing disabled preference. Other extensions still require explicit pairing.
+
+An **unavailable** source means discovery failed, not that SSH failed. Capability sources displays the actual error and extension ID to check. Dev Tunnel discovery does not require its native host; native registration and SSH errors appear in its own dashboard. Inspect the [runtime provider list](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/providers.ts) for bundled identities.
