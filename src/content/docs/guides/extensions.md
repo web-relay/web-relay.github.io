@@ -114,7 +114,7 @@ Load the real launcher and your provider in Chromium. Check discovery, one invoc
 
 ## Preconfigured Dev Tunnel
 
-The latest development launcher includes the workspace’s [Dev Tunnel extension](https://github.com/web-relay/web-relay-workspace/tree/main/ssh-dev-extension) at its fixed ID `kdmgihcbblbplehcahcmcbombjkknhom`. Reload both extensions after building; no manual pairing is needed. Its actions receive no current-tab URL context. **Capability sources → Enable Dev Tunnel provider** controls access. Earlier saved Dev Tunnel pairings, including path-derived IDs and URL-sharing choices, migrate to this fixed route while retaining an existing disabled preference. Other extensions still require explicit pairing.
+The latest development launcher includes the workspace’s [Dev Tunnel extension](https://github.com/web-relay/ssh-dev-extension) at its fixed ID `kdmgihcbblbplehcahcmcbombjkknhom`. Reload both extensions after building; no manual pairing is needed. Its actions receive no current-tab URL context. **Capability sources → Enable Dev Tunnel provider** controls access. Earlier saved Dev Tunnel pairings, including path-derived IDs and URL-sharing choices, migrate to this fixed route while retaining an existing disabled preference. Other extensions still require explicit pairing.
 
 An **unavailable** source means discovery failed, not that SSH failed. Capability sources displays the actual error and extension ID to check. Dev Tunnel discovery does not require its native host; native registration and SSH errors appear in its own dashboard. Inspect the [runtime provider list](https://github.com/web-relay/web-relay/blob/main/apps/launcher-extension/src/providers.ts) for bundled identities.
 
